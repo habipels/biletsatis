@@ -8,7 +8,7 @@ def homepage(request):
     
     return render(
         request=request,
-        template_name='main/home.html',
+        template_name='index.html',
         context={"objects": matching_series}
         )
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Human Sahne, bilet satışı ve etkinlikler hakkında bilgi alabileceğiniz platform.">
+    <meta name="author" content="Habip ELİŞ">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+    <title>HUMAN SAHNE BİLET SATIŞ</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/owl-carousel.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/tooplate-artxibition.css' %}">
+    {% block head %}
+    
+    {% endblock head %}
+    </head>
+    
+    <body>
+    
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+      <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+    
+    <!-- ***** Pre HEader ***** -->
+    <div class="pre-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6">
+                    <span>Stand-up Gösterileriyle Kahkahaya Doyacaksınız! </span>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="text-button">
+                        <a href="rent-venue.html">ETKİNLİKLER! <i class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Header Area start ***** -->
+    {% block header %}
+    {% include "include/header.html" %}
+    {% endblock header %}
+    <!-- ***** Header Area End ***** -->
+    {% block sidebar %}
+    
+    {% endblock sidebar %}
+    {% block content %}
+    
+    {% endblock content %}
+    {% block slider %}
+    
+    {% endblock slider %}
+    {% block footer %}
+    
+    {% endblock footer %}
+
+    <!-- jQuery -->
+    <script src="{% static 'assets/js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'assets/js/popper.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{% static 'assets/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'assets/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'assets/js/imgfix.min.js' %}"></script> 
+    <script src="{% static 'assets/js/mixitup.js' %}"></script> 
+    <script src="{% static 'assets/js/accordions.js' %}"></script>
+    <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+    
+    <!-- Global Init -->
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+  </body>
+</html>
