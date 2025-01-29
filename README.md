@@ -1,0 +1,2 @@
+# biletsatis
+HABİP ELİŞ BİLET SATIŞ ALMA DJANGO WEB SİTESİ
