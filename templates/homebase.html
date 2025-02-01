@@ -30,12 +30,12 @@
     <!-- ***** Preloader Start ***** -->
     <div id="js-preloader" class="js-preloader">
       <div class="preloader-inner">
-        <span class="dot"></span>
-        <div class="dots">
+        
+        
+          <span style="color: white; font-size: 350%;"><b>HUMAN</b><em style="color: black;"><b>SAHNE</b></em> </span>
+
           <span></span>
-          <span></span>
-          <span></span>
-        </div>
+        
       </div>
     </div>
     <!-- ***** Preloader End ***** -->
@@ -69,10 +69,11 @@
     {% block slider %}
     
     {% endblock slider %}
+     <!-- *** Footer *** -->
     {% block footer %}
-    
+    {% include "include/footer.html" %}
     {% endblock footer %}
-
+     <!-- *** Footer *** -->
     <!-- jQuery -->
     <script src="{% static 'assets/js/jquery-2.1.0.min.js' %}"></script>
 

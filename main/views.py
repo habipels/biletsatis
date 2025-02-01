@@ -8,24 +8,6 @@ def homepage(request):
     
     return render(
         request=request,
-        template_name='index.html',
+        template_name='sayfalar/index.html',
         context={"objects": matching_series}
-        )
-
-def series(request, series: str):
-    matching_series = Article.objects.filter(series__slug=series).all()
-    
-    return render(
-        request=request,
-        template_name='main/home.html',
-        context={"objects": matching_series}
-        )
-
-def article(request, series: str, article: str):
-    matching_article = Article.objects.filter(series__slug=series, article_slug=article).first()
-    
-    return render(
-        request=request,
-        template_name='main/article.html',
-        context={"object": matching_article}
         )

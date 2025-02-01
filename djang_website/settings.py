@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'tinymce',
     'fontawesomefree',
     'crispy_forms',
+    "site_set",
+    "etkinlikler",
+    "admin_panel",
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

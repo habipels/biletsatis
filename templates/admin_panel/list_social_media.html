@@ -1,0 +1,94 @@
+{% extends "admin_leyout.html" %}
+{% block content %}
+<div class="container">
+    <h2>Admin Panel - Sosyal Medya</h2>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Sosyal Medya Twitter</h3>
+            <ul>
+                {% for item in sosyalmedyaTw %}
+                <li>{{ item.link }} - <a href="{% url 'update_social_media' 'sosyalmedyaTw' item.id %}">Düzenle</a> - <a href="{% url 'delete_social_media' 'sosyalmedyaTw' item.id %}">Sil</a></li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTwitterModal">Twitter Adresi Ekle</button>
+            <h3>Sosyal Medya Facebook</h3>
+            <ul>
+                {% for item in sosyalmedyafb %}
+                <li>{{ item.link }} - <a href="{% url 'update_social_media' 'sosyalmedyafb' item.id %}">Düzenle</a> - <a href="{% url 'delete_social_media' 'sosyalmedyafb' item.id %}">Sil</a></li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createFacebookModal">Facebook Adresi Ekle</button>
+            <h3>Sosyal Medya Instagram</h3>
+            <ul>
+                {% for item in sosyalmedyaInsgr %}
+                <li>{{ item.link }} - <a href="{% url 'update_social_media' 'sosyalmedyaInsgr' item.id %}">Düzenle</a> - <a href="{% url 'delete_social_media' 'sosyalmedyaInsgr' item.id %}">Sil</a></li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createInstagramModal">Instagram Adresi Ekle</button>
+        </div>
+    </div>
+</div>
+
+<!-- Twitter Modal -->
+<div class="modal" id="createTwitterModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Twitter Adresi Ekle</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" action="{% url 'create_social_media' 'sosyalmedyaTw' %}">
+          {% csrf_token %}
+          {{ form.media }}
+          {{ form }}
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal</button>
+          <button type="submit" class="btn btn-success">Ekle</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Facebook Modal -->
+<div class="modal" id="createFacebookModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Facebook Adresi Ekle</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" action="{% url 'create_social_media' 'sosyalmedyafb' %}">
+          {% csrf_token %}
+          {{ form.media }}
+          {{ form }}
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal</button>
+          <button type="submit" class="btn btn-success">Ekle</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Instagram Modal -->
+<div class="modal" id="createInstagramModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Instagram Adresi Ekle</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" action="{% url 'create_social_media' 'sosyalmedyaInsgr' %}">
+          {% csrf_token %}
+          {{ form.media }}
+          {{ form }}
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal</button>
+          <button type="submit" class="btn btn-success">Ekle</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

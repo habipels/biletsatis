@@ -1,0 +1,33 @@
+{% extends "admin_leyout.html" %}
+{% block content %}
+<div class="container">
+    <h2>Sayfa Logosu</h2>
+    <ul>
+        {% for item in sayfa_logosu %}
+        <li>{{ item.sayfa_logo }} - <a href="{% url 'update_model' 'sayfa_logosu' item.id %}">Düzenle</a> - <a href="{% url 'delete_model' 'sayfa_logosu' item.id %}">Sil</a></li>
+        {% endfor %}
+    </ul>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Sayfa Logosu Ekle</button>
+</div>
+
+<!-- Create Modal -->
+<div class="modal" id="createModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sayfa Logosu Ekle</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" action="{% url 'create_model' 'sayfa_logosu' %}">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    {{ form }}
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-success">Ekle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

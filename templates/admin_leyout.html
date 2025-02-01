@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HABİP ELİŞ BİLET SATIŞ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- BOOTSTRAP STYLES-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'asset/css/bootstrap.css' %}" rel="stylesheet" />
+     <!-- FONTAWESOME STYLES-->
+    <link href="{% static 'asset/css/font-awesome.css' %}" rel="stylesheet" />
+     <!-- MORRIS CHART STYLES-->
+
+        <!-- CUSTOM STYLES-->
+    <link href="{% static 'asset/css/custom.css' %}" rel="stylesheet" />
+     <!-- GOOGLE FONTS-->
+   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     <!-- TABLE STYLES-->
+    <link href="{% static 'asset/js/dataTables/dataTables.bootstrap.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+    {% block head %}
+
+    {% endblock head %}
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/yonetim/manager/">Panale Anasayfa</a>
+            </div>
+  <div style="color: white;
+padding: 15px 50px 5px 50px;
+float: right;
+font-size: 16px;"> Son Giriş Tarihi : {{request.user.last_login}} &nbsp; <a href="/yonetim/logout" class="btn btn-danger square-btn-adjust">ÇIKIŞ YAP</a> </div>
+        </nav>
+           <!-- /. NAV TOP  -->
+                <nav class="navbar-default navbar-side" role="navigation">
+                    <div class="sidebar-collapse">
+                        <ul class="nav" id="main-menu">
+                        <li class="text-center">
+                            <img src="{% static 'asset/img/find_user.png' %}" class="user-image img-responsive"/>
+                            </li>
+
+
+                            <li>
+                                <a class="active-menu"  href="/yonetim/manager/"><i class="fa fa-dashboard fa-3x"></i> Panel</a>
+                            </li>
+                          
+                            <li>
+                                <a  href="/yonetim/kategori"><i class="fa fas fa fa-sort-amount-asc fa-3x"></i> Kategori <span class="fa arrow"></span></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fas fa fa-tag fa-3x"></i> Ürün  Ayarları <span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a  href="/yonetim/urunekle">Ürün Ekle</a>
+                                    </li>
+                                
+                                    <li>
+                                        <a  href="/yonetim/fiyatdegisikligi">Kategori Bazlı Fiyat Değiştirme</a>
+                                    </li>
+                                </ul>
+                            </li>
+                           
+                            <li>
+                                <a href="#"><i class="fa fa-map-marker fa-3x"></i> Lokasyon Ayarları <span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li  >
+                                        <a  href="/yonetim/adresayari">Şirklet Adres Ayarları </a>
+                                    </li>
+                                   
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-sitemap fa-3x"></i> Site Ayarları <span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{% url 'sayfa_logosu' %}">Site Logo Ayarları</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'sayfa_iconu' %}">Site İcon Ayarları</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'numara' %}">Şirket Telefon Ayarları</a>
+                                    </li>
+                                 
+                                    
+                            <li  >
+                                <a  href="{% url 'site_adi' %}">Site İsim  Ayarları </a>
+                            </li>
+                           
+                            <li  >
+                                <a  href="{% url 'banner' %}">Site Banner Ayarları </a>
+                            </li>
+                            <li>
+                                <a  href="{% url 'hakkimizda' %}">Site Hakkımızda Ayarları </a>
+                            </li>
+                            <li>
+                                <a  href="{% url 'iletisim' %}">Site İletişim Ayarları </a>
+                            </li>
+                            <li>
+                                <a  href="{% url 'resimler' %}">Site Resimler Ayarları </a>
+                            </li>
+                            <li>
+                                <a  href="{% url 'aciklama' %}">Site Açıklama Ayarları </a>
+                            </li>
+                                    
+                                    
+                                </ul>
+                              </li>
+                              <li>
+                                <a href="#"><i class="fa fa-heart fa-3x"></i> Sosyal Medya Ayarları <span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{% url 'sosyal_medya_tw' %}">Şirket Twitter Sayfası</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'sosyal_medya_fb' %}">Şirket Facebook Sayfası</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'sosyal_medya_insgr' %}">Şirket Instagram Sayfası</a>
+                                    </li>
+                                </ul>
+                            </li>   
+                            
+                        </ul>
+
+                    </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                     <h2>Hoşgeldiniz {{request.user.first_name}}</h2>
+                        <h5>@WAREYAZILIM</h5>
+
+                    </div>
+                </div>
+                 <!-- /. ROW  -->
+                 <hr />
+
+            {% block slider %}
+
+                {% endblock slider %}
+            {% block content %}
+
+            {% endblock content %}
+
+            {% block sidebar %}
+
+            {% endblock sidebar %}
+
+        </div>
+
+    </div>
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+     <!-- /. WRAPPER  -->
+    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+    <!-- JQUERY SCRIPTS -->
+    {% block script %}
+    
+    
+    <script src="{% static 'asset/js/jquery-1.10.2.js' %}"></script>
+      <!-- BOOTSTRAP SCRIPTS -->
+    <script src="{% static 'asset/js/bootstrap.min.js' %}"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="{% static 'asset/js/jquery.metisMenu.js' %}"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="{% static 'asset/js/dataTables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'asset/js/dataTables/dataTables.bootstrap.js' %}"></script>
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+            });
+    </script>
+         <!-- CUSTOM SCRIPTS -->
+    <script src="{% static 'asset/js/custom.js' %}"></script>
+{% endblock script %}
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+{% extends "admin_leyout.html" %}
+{% block content %}
+<div class="container">
+    <h2>Admin Panel</h2>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Sayfa Logosu</h3>
+            <ul>
+                {% for item in sayfa_logosu %}
+                <li>{{ item.sayfa_logo }} - <a href="{% url 'update_model' 'sayfa_logosu' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Sayfa Iconu</h3>
+            <ul>
+                {% for item in sayfa_iconu %}
+                <li>{{ item.sayfa_logo }} - <a href="{% url 'update_model' 'sayfa_iconu' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Site Adı</h3>
+            <ul>
+                {% for item in site_adi %}
+                <li>{{ item.site_adi_genel }} - <a href="{% url 'update_model' 'site_adi' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Numara</h3>
+            <ul>
+                {% for item in numara %}
+                <li>{{ item.sirket_numarasi }} - <a href="{% url 'update_model' 'numara' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Adres</h3>
+            <ul>
+                {% for item in adres %}
+                <li>{{ item.sirket_adresi }} - <a href="{% url 'update_model' 'adres' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Email Adres</h3>
+            <ul>
+                {% for item in email_adres %}
+                <li>{{ item.sirket_email_adresi }} - <a href="{% url 'update_model' 'email_adres' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Sosyal Medya Twitter</h3>
+            <ul>
+                {% for item in sosyalmedyaTw %}
+                <li>{{ item.link }} - <a href="{% url 'update_model' 'sosyalmedyaTw' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Sosyal Medya Facebook</h3>
+            <ul>
+                {% for item in sosyalmedyafb %}
+                <li>{{ item.link }} - <a href="{% url 'update_model' 'sosyalmedyafb' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Sosyal Medya Instagram</h3>
+            <ul>
+                {% for item in sosyalmedyaInsgr %}
+                <li>{{ item.link }} - <a href="{% url 'update_model' 'sosyalmedyaInsgr' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Banner</h3>
+            <ul>
+                {% for item in banner %}
+                <li>{{ item.baner_resim }} - <a href="{% url 'update_model' 'banner' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Hakkımızda</h3>
+            <ul>
+                {% for item in hakkimizda %}
+                <li>{{ item.hakkimda }} - <a href="{% url 'update_model' 'hakkimizda' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>İletişim</h3>
+            <ul>
+                {% for item in iletisim %}
+                <li>{{ item.iletisim_yollari }} - <a href="{% url 'update_model' 'iletisim' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Resimler</h3>
+            <ul>
+                {% for item in resimler %}
+                <li>{{ item.resim }} - <a href="{% url 'update_model' 'resimler' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Açıklama</h3>
+            <ul>
+                {% for item in aciklama %}
+                <li>{{ item.footer_aciklama }} - <a href="{% url 'update_model' 'aciklama' item.id %}">Düzenle</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

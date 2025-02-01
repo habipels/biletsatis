@@ -1,0 +1,12 @@
+{% extends "admin_leyout.html" %}
+{% block content %}
+<div class="container">
+    <h2>Model Ekle</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form }}
+        <button type="submit" class="btn btn-success">Ekle</button>
+    </form>
+</div>
+{% endblock content %}

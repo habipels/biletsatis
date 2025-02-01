@@ -791,7 +791,7 @@ Venues & Tickets
 }
 
 .venue-item .down-content {
-  background-color: #656c74;
+  background-color:  #b70505;
   position: relative;
   display: inline-block;
   z-index: 1;
@@ -801,7 +801,7 @@ Venues & Tickets
 .venue-item .down-content .left-content {
   width: 31%;
   float: left;
-  background-color: rgba(124,131,139,0.3);
+  background-color: #0b0000;
   height: 100%;
   display: inline-block;
   position: absolute;
@@ -821,8 +821,9 @@ Venues & Tickets
 
 .venue-item .down-content .right-content {
   width: 64%;
-  margin-left: 5%;
+  
   float: right;
+  background-color: #b70505 !important;
 }
 
 .venue-item .down-content .right-content h4 {
@@ -852,7 +853,7 @@ Venues & Tickets
 }
 
 .venue-item .down-content .right-content .price {
-  background-color: rgba(124,131,139,0.3);
+  background-color: rgba(0, 7, 15, 0.3);
   display: inline-block;
   padding: 20px;
   margin-top: 25px;;
@@ -879,7 +880,7 @@ Coming Events
 */
 
 .coming-events {
-  background-color: #656c74;
+  background-color: black;
   padding: 120px 0px;
   position: relative;
 }
@@ -891,7 +892,7 @@ Coming Events
   height: auto;
   top: 0;
   bottom: 0;
-  background-color: rgba(124,131,139,0.3);
+  background-color: rgb(175, 8, 8,0.5);
 }
 
 .coming-events .left-button .main-white-button {
@@ -1008,20 +1009,21 @@ Footer
 */
 
 footer {
+  background-color: #b70505 !important;
   padding-top: 60px;
-  margin-bottom: 25px;
+  padding-bottom: 25px;
 }
 
 footer h4 {
    font-size: 20px;
-   color: #2a2a2a;
+   color: white;
    font-weight: 700;
    margin-bottom: 25px;;
 }
 
 footer .address span {
   font-size: 14px;
-  color: #2a2a2a;
+  color: white;
   line-height: 24px;
   font-weight: 300;
 }
@@ -1032,7 +1034,7 @@ footer .links {
 
 footer .links ul li a {
   font-size: 14px;
-  color: #2a2a2a;
+  color: white;
   font-weight: 300;
   margin-bottom: 5px;
 }
@@ -1043,7 +1045,7 @@ footer .hours {
 
 footer .hours ul li {
   font-size: 14px;
-  color: #2a2a2a;
+  color: white;
   font-weight: 300;
   margin-bottom: 5px;
 }
@@ -1065,12 +1067,12 @@ footer p.copyright {
 .sub-footer .logo span {
   font-size: 28px;
   font-weight: 800;
-  color: #656c74;
+  color: white;
 }
 
 .sub-footer .logo span em {
   font-style: normal;
-  color: #2a2a2a;
+  color: black;
 }
 
 .sub-footer .menu {
@@ -2265,7 +2267,7 @@ preloader
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #232d39;
+    background-color: #b70505;
     display: -webkit-box;
     display: flex;
     -webkit-box-align: center;
@@ -2315,9 +2317,8 @@ preloader
 
 .preloader-inner {
     position: relative;
-    width: 142px;
-    height: 40px;
-    background: #232d39;
+
+    background: #b70505;
 }
 
 .preloader-inner .dot {
