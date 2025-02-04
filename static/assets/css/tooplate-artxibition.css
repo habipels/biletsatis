@@ -198,7 +198,7 @@ body {
   display: inline-block;
   font-size: 14px;
   padding: 12px 18px;
-  background-color: #343a3e;
+  background-color: black;
   color: #fff;
   text-align: center;
   font-weight: 500;
@@ -1900,33 +1900,33 @@ Tickets Page
 }
 
 .tickets-page .ticket-item .down-content {
-  background-color: #fafafa;
+  background-color: #b70505;
   padding: 30px;;
 }
 
 .tickets-page .ticket-item .down-content span {
   font-size: 14px;
-  color: #656c74;
+  color: white;
   font-weight: 700;
 }
 
 .tickets-page .ticket-item .down-content h4 {
   font-size: 22px;
   font-weight: 700;
-  color: #2a2a2a;
+  color: white;
   margin-top: 10px;
   margin-bottom: 25px;
 }
 
 .tickets-page .ticket-item .down-content ul li {
   font-size: 14px;
-  color: #2a2a2a;
+  color: white;
   font-weight: 300;
   margin-bottom: 15px;
 }
 
 .tickets-page .ticket-item .down-content ul li i {
-  color: #7c838b;
+  color: white;
   margin-right: 10px;
   width: 15px;
   height: 25px;
@@ -1952,8 +1952,8 @@ Tickets Page
   display: inline-block;
   font-size: 14px;
   padding: 12px 20px;
-  background-color: #e6e7e8;
-  color: #2a2a2a;
+  background-color: black;
+  color: white;
   text-align: center;
   font-weight: 500;
   text-transform: capitalize;
@@ -1962,7 +1962,7 @@ Tickets Page
 
 .tickets-page .pagination ul li a:hover,
 .tickets-page .pagination ul li.active a {
-  background-color: #343a3e;
+  background-color: #b70505;
   color: #fff!important;
 }
 

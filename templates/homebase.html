@@ -11,7 +11,7 @@
 
     <title>HUMAN SAHNE BİLET SATIŞ</title>
 
-    <link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}">
+    <link rel="icon" type="image/x-icon" href="{{icon.sayfa_logo.url}}">
     <!-- Additional CSS Files -->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css' %}">
 
@@ -45,7 +45,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-sm-6">
-                    <span>Stand-up Gösterileriyle Kahkahaya Doyacaksınız! </span>
+                    <span>{{aciklama}} </span>
                 </div>
                 <div class="col-lg-6 col-sm-6">
                     <div class="text-button">
