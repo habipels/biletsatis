@@ -31,21 +31,24 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # ...existing apps...
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Add our new application
     'main',
     'users',
     'tinymce',
     'fontawesomefree',
     'crispy_forms',
-    "site_set",
-    "etkinlikler",
-    "admin_panel",
+    'site_set',
+    'etkinlikler',
+    'admin_panel',
+    'ckeditor',
+    # Remove the incorrect entry
+    # 'biletsatis.templatetags',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -74,6 +77,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+            'custom_filters': 'templatetags.custom_filters',
+            },
+
         },
     },
 ]
@@ -139,7 +146,23 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_CONFIGS = {
+    'awesome_ckeditor': {
+        'toolbar': 'Basic',
+    },
+}
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'width': '100%',
 
+        'wordcount': {
+            'minCharCount': 25
+        }
+    },
+}
 AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
 
 TINYMCE_DEFAULT_CONFIG = {

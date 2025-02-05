@@ -15,7 +15,7 @@
                         <h6>ETKİNLİKLERİ GÖRMEK İÇİN TIKLAYINIZ ...</h6>
                         <h2>HUMAN SAHNE ETKİNLİKLERİ</h2>
                         <div class="main-white-button">
-                            <a href="ticket-details.html">ETKİNLİKLER</a>
+                            <a href="{% url 'main:etkinlikler_sayfasi' %}">ETKİNLİKLER</a>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <div class="owl-show-events owl-carousel">
                     {% for i in etkinlikler %}
                     <div class="item">
-                            <a href="event-details.html"><img src="{{i.etkinlik_resim.url}}" alt=""></a>
+                            <a href="{% url 'main:etkinlik_detay' i.id i.etkinlik_linki %}"><img src="{{i.etkinlik_resim.url}}" alt=""></a>
                         </div>
                     {% endfor %}
                         
@@ -77,7 +77,13 @@
                                 <h4>{{i.etkinlik_adi}}</h4>
                                 <p>{{i.etkinlik_aciklama}}</p>
                                 <ul>
-                                <li><i class="fa fa-calendar "></i>{{i.etkinlik_tarihi}}</li>
+                                <li><i class="fa fa-calendar "></i>
+                                {% if i.etkinlik_tarihi|date:"U" < now|date:"U" %}
+                                <span style="color: black !important;">{{i.etkinlik_tarihi}} </span>
+                                {% else %}
+                                    {{i.etkinlik_tarihi}}
+                                {% endif %}
+                                </li>
                                     
                                     <li><i class="fa fa-user"></i>{{i.etkinlik_katitim_sayisi}}</li>
                                 </ul>
