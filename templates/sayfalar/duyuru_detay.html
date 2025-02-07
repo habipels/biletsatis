@@ -1,0 +1,95 @@
+{% extends "homebase.html" %}
+{% load static %}
+
+{% block header %}
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="/" class="logo">HUMAN<em>SAHNE</em></a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{% url 'main:homepage' %}"> <b><i>ANASAYFA</i></b> </a></li>
+                            <li><a href="{% url 'main:etkinlikler_sayfasi' %}"><b><i>ETKİNLİKLER</i></b></a></li>
+                            <li><a href="{% url 'main:galeri' %}"><b><i>GALERİ</i></b></a></li>
+                            <li><a class="active" href="{% url 'main:duyurular' %}"><b><i>DUYURULAR</i></b></a></li>
+                            <li><a href="{% url 'main:iletisim' %}"><b><i>İLETİŞİM</i></b></a></li>
+                            <li><a href="{% url 'main:hakkimizda' %}"><b><i>HAKKIMIZDA</i></b></a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+{% endblock header %}
+
+{% block sidebar %}
+<!-- ***** Main Banner Area Start ***** -->
+    <div class="main-banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-content">
+                        <div class="next-show">
+                        </div>
+                        <h2>{{ duyuru.title }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Main Banner Area End ***** -->
+{% endblock sidebar %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section-heading">
+                <h2>{{ duyuru.title }}</h2>
+                <p>{{ duyuru.subtitle }}</p>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="event-item">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="left-content">
+                            <h4>{{ duyuru.title }}</h4>
+                            <p>{{ duyuru.content |safe }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="thumb">
+                            <img src="{{ duyuru.duyuru_resmi.url }}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="right-content">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-clock-o"></i>
+                                    <h6>{{ duyuru.published|date:"d M Y" }}<br>{{ duyuru.published|date:"H:i" }}</h6>
+                                </li>
+                                <li>
+                                    <i class="fa fa-user"></i>
+                                    <span>{{ duyuru.series.title }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

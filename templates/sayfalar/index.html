@@ -66,7 +66,7 @@
                             <div class="left-content">
                                 <div class="main-white-button">
                                 {% if i.etkinlik_tarihi|date:"U" < now|date:"U" %}
-                                        <a href="ticket-details.html">Yorum Yap</a>
+                                        <a href="{% url 'main:etkinlik_detay' i.id i.etkinlik_linki %}">Yorum Yap</a>
                                     {% else %}
                                        <a href="{% url 'main:etkinlik_detay' i.id i.etkinlik_linki %}">Bilet Al</a>
                                     {% endif %}
@@ -92,7 +92,12 @@
                                 <i class="fa fa-map-marker "></i>{{i.etkinlik_yeri}}</li>
                                 </ul>
                                 <div class="price">
+                                    {% if i.etkinlik_tarihi|date:"U" < now|date:"U" %}
+                                    <span>Etkinlik Hakkında Yorumlarınızı Bekliyoruz </span>
+                                    {% else %}
                                     <span>1 Bilet <br>Fiyatı <em>{{i.etkinlik_fiyati}} ₺</em></span>
+                                    {% endif %}
+                                    
                                 </div>
                             </div> 
                         </div>

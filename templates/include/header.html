@@ -5,17 +5,16 @@
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">HUMAN<em>SAHNE</em></a>
+                        <a href="/" class="logo">HUMAN<em>SAHNE</em></a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li><a href="{% url 'main:homepage' %}" class="active"> <b><i>ANASAYFA</i></b> </a></li>
                             <li><a href="{% url 'main:etkinlikler_sayfasi' %}"><b><i>ETKİNLİKLER</i></b></a></li>
-                            <li><a href="rent-venue.html"><b><i>GALERİ</i></b></a></li>
+                            <li><a href="{% url 'main:galeri' %}"><b><i>GALERİ</i></b></a></li>
                             <li><a href="{% url 'main:duyurular' %}"><b><i>DUYURULAR</i></b></a></li> 
-                            <li><a href="shows-events.html"><b><i>YORUMLAR</i></b></a></li> 
-                            <li><a href="contact.html"><b><i>İLETİŞİM</i></b></a></li> 
-                            <li><a href="shows-events.html"><b><i>HAKKIMIZDA</i></b></a></li> 
+                            <li><a href="{% url 'main:iletisim' %}"><b><i>İLETİŞİM</i></b></a></li> 
+                            <li><a href="{% url 'main:hakkimizda' %}"><b><i>HAKKIMIZDA</i></b></a></li> 
                         </ul>        
                         <a class='menu-trigger'>
                             <span>Menu</span>

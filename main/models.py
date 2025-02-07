@@ -18,6 +18,7 @@ class ArticleSeries(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=200)
     subtitle = models.CharField(max_length=200, default="", blank=True)
+    duyuru_resmi = models.FileField(upload_to='duyurular/',blank = True,verbose_name="Duyuru Resmi")
     article_slug = models.SlugField("Article slug", null=False, blank=False, unique=True)
     content = HTMLField(blank=True, default="")
     notes = HTMLField(blank=True, default="")

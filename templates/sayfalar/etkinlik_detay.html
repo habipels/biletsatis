@@ -1,6 +1,36 @@
 {% extends "homebase.html" %}
 {% load static %}
 {% load custom_filters %}
+{% block header %}
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="/" class="logo">HUMAN<em>SAHNE</em></a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{% url 'main:homepage' %}" > <b><i>ANASAYFA</i></b> </a></li>
+                            <li><a class="active" href="{% url 'main:etkinlikler_sayfasi' %}"><b><i>ETKİNLİKLER</i></b></a></li>
+                            <li><a href="{% url 'main:galeri' %}"><b><i>GALERİ</i></b></a></li>
+                            <li><a  href="{% url 'main:duyurular' %}"><b><i>DUYURULAR</i></b></a></li> 
+                            <li><a href="{% url 'main:iletisim' %}"><b><i>İLETİŞİM</i></b></a></li> 
+                            <li><a href="{% url 'main:hakkimizda' %}"><b><i>HAKKIMIZDA</i></b></a></li> 
+                        </ul>        
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+{% endblock header %}
 {% block sidebar %}
 
 {% endblock sidebar %}
@@ -24,22 +54,36 @@
                             <li> <b>Organizatör : {{etkinlik.etkinlik_organizator}}</b> </li>
                         </ul>
                         <div class="quantity-content">
+                           
+                            {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+   
+                            {% else %}
                             <div class="left-content">
                                 <h6>Standard Bilet</h6>
                                 <p>{{etkinlik.etkinlik_fiyati}} ₺ </p>
                             </div>
                             <div class="right-content">
-                                <div class="quantity buttons_added">
+                            {% if etkinlik.koltuk_duzeni_var_mi %}
+                            
+                            {% else %}
+                              <div class="quantity buttons_added">
                                     <input type="button" value="-" class="minus" onclick="updateQuantity(-1)">
                                     <input type="number" step="1" min="1" max="" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="" id="quantity">
                                     <input type="button" value="+" class="plus" onclick="updateQuantity(1)">
                                 </div>
+                            {% endif %}
+                              
                             </div>
+                            {% endif %}
                         </div>
+                        {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+   
+                        {% else %}
                         <div class="total">
                             <h4>Toplam: <span id="toplam_fiyat">{{etkinlik.etkinlik_fiyati}} ₺</span></h4>
                             <div class="main-dark-button"><a href="#">SATIN AL</a></div>
                         </div>
+                        {% endif %}
                         <div class="warn">
                             <p></p>
                         </div>
@@ -48,6 +92,12 @@
             </div>
         </div>
     </div>
+
+    {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+   
+{% else %}
+   
+{% if etkinlik.koltuk_duzeni_var_mi %}
 <div class="seating-arrangement">
     <div class="container">
         <div class="row">
@@ -62,10 +112,20 @@
                             <tr>
                         {% endif %}
                         {% if row != "-2" and row != "-1"  %}
-                        <td class="seat" style="background-image: url('{% static 'assets/images/seat.png' %}'); background-size: cover;">
-                            <input type="checkbox" class="seat-checkbox" value="{{ row }}" onclick="updateSeatSelection(this)">
+                        {% etkinlik_koltuk_satin_alinma_durumu etkinlik.id row as sonuc %}
+                        {% koltuk_fiyati etkinlik.id row as fiyat %}
+                        {% if sonuc %}
+                            <td class="seat" style="background-color: #b70505;">
+                           
                             {{ row }}
                         </td>
+                        {% else %}
+                        <td class="seat" style="background-image: url('{% static 'assets/images/seat.png' %}'); background-size: cover;">
+                            <input type="checkbox" class="seat-checkbox" value="{{ row }}" data-price="{{ fiyat }}" onclick="updateSeatSelection(this)">
+                            {{ row }} - {{ fiyat }} ₺
+                        </td>
+                        {% endif %}
+                        
                         {% elif  row == "-2" %}
                         <td rowspan="2" colspan="3" style="text-align:center; background-image: url('https://www.berryalloc.com/-/media/sites/berryalloc/general/parquet/chateau-737x415px.ashx?h=415&w=737&la=tr-TR&hash=4F20AE50F2B9F7EBCE809E9B9139C9F7'); background-size: cover; background-position: center;" >
                             <b>SAHNE</b>
@@ -79,6 +139,9 @@
         </div>
     </div>
 </div>
+{% else %}
+{% endif %}
+
 
     <div class="ticket-details-page">
         <div class="container">
@@ -89,12 +152,12 @@
             </div>
         </div>
     </div>
-
+    {% endif %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const ticketPrice = parseFloat("{{etkinlik.etkinlik_fiyati}}");
         let selectedSeats = [];
+        const ticketPrice = parseFloat("{{etkinlik.etkinlik_fiyati}}");
 
         window.updateQuantity = function(change) {
             const quantityInput = document.getElementById('quantity');
@@ -108,7 +171,7 @@
                 document.querySelector(`.seat-checkbox[value="${seatValue}"]`).checked = false;
             }
             quantityInput.value = quantity;
-            document.getElementById('toplam_fiyat').innerText = (ticketPrice * quantity).toFixed(2) + ' ₺';
+            updateTotalPrice();
         }
 
         window.updateSeatSelection = function(checkbox) {
@@ -120,7 +183,22 @@
             }
             const quantityInput = document.getElementById('quantity');
             quantityInput.value = selectedSeats.length;
-            document.getElementById('toplam_fiyat').innerText = (ticketPrice * selectedSeats.length).toFixed(2) + ' ₺';
+            updateTotalPrice();
+        }
+
+        function updateTotalPrice() {
+            let totalPrice = 0;
+            if (selectedSeats.length > 0) {
+                selectedSeats.forEach(seat => {
+                    const seatCheckbox = document.querySelector(`.seat-checkbox[value="${seat}"]`);
+                    const seatPrice = parseFloat(seatCheckbox.getAttribute('data-price'));
+                    totalPrice += seatPrice;
+                });
+            } else {
+                const quantity = parseInt(document.getElementById('quantity').value);
+                totalPrice = ticketPrice * quantity;
+            }
+            document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
         }
     });
 </script>

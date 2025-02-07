@@ -14,12 +14,12 @@
                         <h4>HIZLI LİNKLER</h4>
                         <hr>
                         <ul>
-                            <li><a href="#">ANASAYFA</a></li>
-                            <li><a href="#">ETKİNLİKLER</a></li>
-                            <li><a href="#">GALERİ</a></li>
-                            <li><a href="#">DUYURULAR</a></li>
-                            <li><a href="#">İLETİŞİM</a></li>
-                            <li><a href="#">HAKKIMIZDA</a></li>
+                            <li><a href="{% url 'main:homepage' %}">ANASAYFA</a></li>
+                            <li><a href="{% url 'main:etkinlikler_sayfasi' %}">ETKİNLİKLER</a></li>
+                            <li><a href="{% url 'main:galeri' %}">GALERİ</a></li>
+                            <li><a href="{% url 'main:duyurular' %}">DUYURULAR</a></li>
+                            <li><a href="{% url 'main:iletisim' %}">İLETİŞİM</a></li>
+                            <li><a href="{% url 'main:hakkimizda' %}">HAKKIMIZDA</a></li>
                         </ul>
                      
 
@@ -57,11 +57,7 @@
                             <div class="col-lg-6">
                                 <div class="menu">
                                     <ul>
-                                        <li><a href="index.html" class="active">Home</a></li>
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="rent-venue.html">Rent Venue</a></li>
-                                        <li><a href="shows-events.html">Shows & Events</a></li> 
-                                        <li><a href="tickets.html">Tickets</a></li> 
+
                                     </ul>
                                 </div>
                             </div>

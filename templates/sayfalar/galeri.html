@@ -1,0 +1,93 @@
+{% extends "homebase.html" %}
+{% load static %}
+
+{% block header %}
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="/" class="logo">HUMAN<em>SAHNE</em></a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{% url 'main:homepage' %}"> <b><i>ANASAYFA</i></b> </a></li>
+                            <li><a href="{% url 'main:etkinlikler_sayfasi' %}"><b><i>ETKİNLİKLER</i></b></a></li>
+                            <li><a class="active" href="{% url 'main:galeri' %}"><b><i>GALERİ</i></b></a></li>
+                            <li><a href="{% url 'main:duyurular' %}"><b><i>DUYURULAR</i></b></a></li>
+                            <li><a href="{% url 'main:iletisim' %}"><b><i>İLETİŞİM</i></b></a></li>
+                            <li><a href="{% url 'main:hakkimizda' %}"><b><i>HAKKIMIZDA</i></b></a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+{% endblock header %}
+
+{% block sidebar %}
+<!-- ***** Main Banner Area Start ***** -->
+    <div class="main-banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-content">
+                        <div class="next-show">
+                        </div>
+                        <h2>Galeri</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Main Banner Area End ***** -->
+{% endblock sidebar %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section-heading">
+                <h2>Etkinliklerimize Ait Görsellerimiz</h2>
+            </div>
+        </div>
+        {% for resim in page_obj %}
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="gallery-item">
+                <div class="thumb">
+                    <img src="{{ resim.resim.url }}" alt="">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

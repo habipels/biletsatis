@@ -1,5 +1,35 @@
 {% extends "homebase.html" %}
 {% load static %}
+{% block header %}
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="/" class="logo">HUMAN<em>SAHNE</em></a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{% url 'main:homepage' %}" > <b><i>ANASAYFA</i></b> </a></li>
+                            <li><a class="active" href="{% url 'main:etkinlikler_sayfasi' %}"><b><i>ETKİNLİKLER</i></b></a></li>
+                            <li><a href="{% url 'main:galeri' %}"><b><i>GALERİ</i></b></a></li>
+                            <li><a  href="{% url 'main:duyurular' %}"><b><i>DUYURULAR</i></b></a></li> 
+                            <li><a href="{% url 'main:iletisim' %}"><b><i>İLETİŞİM</i></b></a></li> 
+                            <li><a href="{% url 'main:hakkimizda' %}"><b><i>HAKKIMIZDA</i></b></a></li> 
+                        </ul>        
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+{% endblock header %}
 {% block sidebar %}
 <!-- ***** Main Banner Area Start ***** -->
     <div class="main-banner">
@@ -11,11 +41,9 @@
                             
                             
                         </div>
-                        <h6>Opening on Thursday, March 31st</h6>
-                        <h2>The Sunny Hill Festival 2022</h2>
-                        <div class="main-white-button">
-                            <a href="ticket-details.html">Purchase Tickets</a>
-                        </div>
+                       
+                        <h2>TÜM ETKİNLİKLERİMİZ</h2>
+                       
                     </div>
                 </div>
             </div>
@@ -27,155 +55,77 @@
 
 {% endblock sidebar %}
 {% block content %}
-
-    <div class="tickets-page">
-        <div class="container">
-            <div class="row">
-               
-                <div class="col-lg-12">
-                    <div class="heading">
-                        <h2>TÜM ETKİNLİKLER</h2>
-                    </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section-heading">
+                <h2>Etkinlikler</h2>
+            </div>
+        </div>
+        {% for etkinlik in page_obj %}
+        <div class="col-lg-4">
+            <div class="venue-item">
+                <div class="thumb">
+                    <img src="{{ etkinlik.etkinlik_resim.url }}" alt="">
                 </div>
-                <div class="col-lg-4">
-                    <div class="ticket-item">
-                        <div class="thumb">
-                            <img src="{% static 'assets/images/ticket-01.jpg' %}" alt="">
-                            <div class="price">
-                                <span>1 ticket<br>from <em>$25</em></span>
-                            </div>
-                        </div>
-                        <div class="down-content">
-                            <span>There Are 150 Tickets Left For This Show</span>
-                            <h4>Wonderful Festival</h4>
-                            <ul>
-                                <li><i class="fa fa-clock-o"></i> Thursday: 05:00 PM to 10:00 PM</li>
-                                <li><i class="fa fa-map-marker"></i>908 Copacabana Beach, Rio de Janeiro</li>
-                            </ul>
-                            <div class="main-dark-button">
-                                <a href="ticket-details.html">Purchase Tickets</a>
-                            </div>
+                <div class="down-content">
+                    <div class="left-content">
+                        <div class="main-white-button">
+                            {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+                                <a href="{% url 'main:etkinlik_detay' etkinlik.id etkinlik.etkinlik_linki %}">Yorum Yap</a>
+                            {% else %}
+                                <a href="{% url 'main:etkinlik_detay' etkinlik.id etkinlik.etkinlik_linki %}">Bilet Al</a>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ticket-item">
-                        <div class="thumb">
-                            <img src="{% static 'assets/images/ticket-02.jpg' %}" alt="">
-                            <div class="price">
-                                <span>1 ticket<br>from <em>$45</em></span>
-                            </div>
-                        </div>
-                        <div class="down-content">
-                            <span>There Are 200 Tickets Left For This Show</span>
-                            <h4>Golden Festival</h4>
-                            <ul>
-                                <li><i class="fa fa-clock-o"></i> Sunday: 06:00 PM to 09:00 PM</li>
-                                <li><i class="fa fa-map-marker"></i>789 Copacabana Beach, Rio de Janeiro</li>
-                            </ul>
-                            <div class="main-dark-button">
-                                <a href="ticket-details.html">Purchase Tickets</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ticket-item">
-                        <div class="thumb">
-                            <img src="{% static 'assets/images/ticket-03.jpg' %}" alt="">
-                            <div class="price">
-                                <span>1 ticket<br>from <em>$65</em></span>
-                            </div>
-                        </div>
-                        <div class="down-content">
-                            <span>There Are 260 Tickets Left For This Show</span>
-                            <h4>Water Splash Festival</h4>
-                            <ul>
-                                <li><i class="fa fa-clock-o"></i> Tuesday: 07:00 PM to 11:00 PM</li>
-                                <li><i class="fa fa-map-marker"></i>456 Copacabana Beach, Rio de Janeiro</li>
-                            </ul>
-                            <div class="main-dark-button">
-                                <a href="ticket-details.html">Purchase Tickets</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ticket-item">
-                        <div class="thumb">
-                            <img src="{% static 'assets/images/ticket-04.jpg' %}" alt="">
-                            <div class="price">
-                                <span>1 ticket<br>from <em>$20</em></span>
-                            </div>
-                        </div>
-                        <div class="down-content">
-                            <span>There Are 340 Tickets Left For This Show</span>
-                            <h4>Tiger Festival</h4>
-                            <ul>
-                                <li><i class="fa fa-clock-o"></i> Thursday: 06:40 PM to 11:40 PM</li>
-                                <li><i class="fa fa-map-marker"></i>123 Copacabana Beach, Rio de Janeiro</li>
-                            </ul>
-                            <div class="main-dark-button">
-                                <a href="ticket-details.html">Purchase Tickets</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ticket-item">
-                        <div class="thumb">
-                            <img src="{% static 'assets/images/ticket-05.jpg' %}" alt="">
-                            <div class="price">
-                                <span>1 ticket<br>from <em>$30</em></span>
-                            </div>
-                        </div>
-                        <div class="down-content">
-                            <span>There Are 420 Tickets Left For This Show</span>
-                            <h4>Woodland Festival</h4>
-                            <ul>
-                                <li><i class="fa fa-clock-o"></i> Wednesday: 06:00 PM to 09:00 PM</li>
-                                <li><i class="fa fa-map-marker"></i>1122 Copacabana Beach, Rio de Janeiro</li>
-                            </ul>
-                            <div class="main-dark-button">
-                                <a href="ticket-details.html">Purchase Tickets</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ticket-item">
-                        <div class="thumb">
-                            <img src="{% static 'assets/images/ticket-06.jpg' %}" alt="">
-                            <div class="price">
-                                <span>1 ticket<br>from <em>$40</em></span>
-                            </div>
-                        </div>
-                        <div class="down-content">
-                            <span>There Are 520 Tickets Left For This Show</span>
-                            <h4>Winter Festival</h4>
-                            <ul>
-                                <li><i class="fa fa-clock-o"></i> Saturday: 06:00 PM to 09:00 PM</li>
-                                <li><i class="fa fa-map-marker"></i>220 Copacabana Beach, Rio de Janeiro</li>
-                            </ul>
-                            <div class="main-dark-button">
-                                <a href="ticket-details.html">Purchase Tickets</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="pagination">
+                    <div class="right-content">
+                        <h4>{{ etkinlik.etkinlik_adi }}</h4>
+                       
                         <ul>
-                            <li><a href="#">Prev</a></li>
-                            <li><a href="#">1</a></li>
-                            <li class="active"><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">Next</a></li>
+                            <li><i class="fa fa-calendar "></i>
+                                {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+                                    <span style="color: black !important;">{{ etkinlik.etkinlik_tarihi }} </span>
+                                {% else %}
+                                    {{ etkinlik.etkinlik_tarihi }}
+                                {% endif %}
+                            </li>
+                            <li><i class="fa fa-user"></i>{{ etkinlik.etkinlik_katitim_sayisi }}</li>
                         </ul>
+                        
+                        <div class="price">
+                        {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+                                <span>Etkinlik Hakkında Yorumlarınızı Bekliyoruz </span>
+                            {% else %}
+                                <span>1 Bilet <br>Fiyatı <em>{{ etkinlik.etkinlik_fiyati }} ₺</em></span>
+                            {% endif %}
+                            
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
 
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
