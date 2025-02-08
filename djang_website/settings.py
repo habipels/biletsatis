@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'etkinlikler',
     'admin_panel',
     'ckeditor',
+
     # Remove the incorrect entry
     # 'biletsatis.templatetags',
 ]

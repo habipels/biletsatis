@@ -53,37 +53,38 @@
                             <li><i class="fa fa-map-marker"></i>{{etkinlik.etkinlik_yeri}}</li>
                             <li> <b>Organizatör : {{etkinlik.etkinlik_organizator}}</b> </li>
                         </ul>
-                        <div class="quantity-content">
-                           
-                            {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
-   
-                            {% else %}
-                            <div class="left-content">
-                                <h6>Standard Bilet</h6>
-                                <p>{{etkinlik.etkinlik_fiyati}} ₺ </p>
-                            </div>
-                            <div class="right-content">
-                            {% if etkinlik.koltuk_duzeni_var_mi %}
-                            
-                            {% else %}
-                              <div class="quantity buttons_added">
-                                    <input type="button" value="-" class="minus" onclick="updateQuantity(-1)">
-                                    <input type="number" step="1" min="1" max="" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="" id="quantity">
-                                    <input type="button" value="+" class="plus" onclick="updateQuantity(1)">
+                        <form method="post" action="{% url 'main:sepet' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="etkinlik_id" value="{{ etkinlik.id }}">
+                            <input type="hidden" name="selected_seats" id="selected_seats" value="">
+                            <input type="hidden" name="total_price" id="total_price" value="{{etkinlik.etkinlik_fiyati}}">
+                            <div class="quantity-content">
+                                {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+                                {% else %}
+                                <div class="left-content">
+                                    <h6>Standard Bilet</h6>
+                                    <p>{{etkinlik.etkinlik_fiyati}} ₺ </p>
                                 </div>
-                            {% endif %}
-                              
+                                <div class="right-content">
+                                    {% if etkinlik.koltuk_duzeni_var_mi %}
+                                    {% else %}
+                                    <div class="quantity buttons_added">
+                                        <input type="button" value="-" class="minus" onclick="updateQuantity(-1)">
+                                        <input type="number" step="1" min="1" max="" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="" id="quantity">
+                                        <input type="button" value="+" class="plus" onclick="updateQuantity(1)">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
+                            {% else %}
+                            <div class="total">
+                                <h4>Toplam: <span id="toplam_fiyat">{{etkinlik.etkinlik_fiyati}} ₺</span></h4>
+                                <button type="submit" style="background-color: black; color: white;" class="main-dark-button">SATIN AL</button>
                             </div>
                             {% endif %}
-                        </div>
-                        {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
-   
-                        {% else %}
-                        <div class="total">
-                            <h4>Toplam: <span id="toplam_fiyat">{{etkinlik.etkinlik_fiyati}} ₺</span></h4>
-                            <div class="main-dark-button"><a href="#">SATIN AL</a></div>
-                        </div>
-                        {% endif %}
+                        </form>
                         <div class="warn">
                             <p></p>
                         </div>
@@ -111,24 +112,36 @@
                             </tr>
                             <tr>
                         {% endif %}
-                        {% if row != "-2" and row != "-1"  %}
-                        {% etkinlik_koltuk_satin_alinma_durumu etkinlik.id row as sonuc %}
-                        {% koltuk_fiyati etkinlik.id row as fiyat %}
-                        {% if sonuc %}
-                            <td class="seat" style="background-color: #b70505;">
-                           
-                            {{ row }}
-                        </td>
-                        {% else %}
-                        <td class="seat" style="background-image: url('{% static 'assets/images/seat.png' %}'); background-size: cover;">
-                            <input type="checkbox" class="seat-checkbox" value="{{ row }}" data-price="{{ fiyat }}" onclick="updateSeatSelection(this)">
-                            {{ row }} - {{ fiyat }} ₺
-                        </td>
-                        {% endif %}
-                        
+                        {% if row != "-2" and row != "-1" and row != "0" and row != "-3" and row != "-4"  %}
+                            {% etkinlik_koltuk_satin_alinma_durumu etkinlik.id row as sonuc %}
+                            {% koltuk_fiyati etkinlik.id row as fiyat %}
+                            {% if sonuc %}
+                                <td class="seat" style="background-color: #b70505;">
+                            
+                                {{ row }}
+                            </td>
+                            {% else %}
+                            <td class="seat" style="background-image: url('{% static 'assets/images/seat.png' %}'); background-size: cover;">
+                                <input type="checkbox" class="seat-checkbox" value="{{ row }}" data-price="{{ fiyat }}" onclick="updateSeatSelection(this)">
+                                {{ row }} - {{ fiyat }} ₺
+                            </td>
+                            {% endif %}
+                            
                         {% elif  row == "-2" %}
-                        <td rowspan="2" colspan="3" style="text-align:center; background-image: url('https://www.berryalloc.com/-/media/sites/berryalloc/general/parquet/chateau-737x415px.ashx?h=415&w=737&la=tr-TR&hash=4F20AE50F2B9F7EBCE809E9B9139C9F7'); background-size: cover; background-position: center;" >
+                        <td rowspan="2" colspan="4" style="text-align:center; background-image: url('https://www.berryalloc.com/-/media/sites/berryalloc/general/parquet/chateau-737x415px.ashx?h=415&w=737&la=tr-TR&hash=4F20AE50F2B9F7EBCE809E9B9139C9F7'); background-size: cover; background-position: center;" >
                             <b>SAHNE</b>
+                        </td>
+                        {% elif  row == "0" %}
+                        <td rowspan="4" colspan="1"  >
+                            
+                        </td>
+                        {% elif  row == "-3" %}
+                        <td style="background-color: black;">
+                           
+                            
+                        </td>
+                        {% elif  row == "-4" %}
+                        <td >         
                         </td>
                         {% endif %}
                         {% endfor %}
@@ -153,6 +166,58 @@
         </div>
     </div>
     {% endif %}
+
+
+{% if etkinlik.koltuk_duzeni_var_mi %}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let selectedSeats = [];
+
+        window.updateQuantity = function(change) {
+            const quantityInput = document.getElementById('quantity');
+            let quantity = parseInt(quantityInput.value);
+            quantity = isNaN(quantity) ? 1 : quantity;
+            quantity += change;
+            if (quantity < 1) {
+                quantity = 1;
+            } else if (change < 0 && selectedSeats.length > 0) {
+                const seatValue = selectedSeats.pop();
+                document.querySelector(`.seat-checkbox[value="${seatValue}"]`).checked = false;
+            }
+            quantityInput.value = quantity;
+            updateTotalPrice();
+        }
+
+        window.updateSeatSelection = function(checkbox) {
+            const seatValue = parseInt(checkbox.value);
+            if (checkbox.checked) {
+                selectedSeats.push(seatValue);
+            } else {
+                selectedSeats = selectedSeats.filter(seat => seat !== seatValue);
+            }
+            const quantityInput = document.getElementById('quantity');
+            if (quantityInput) {
+                quantityInput.value = selectedSeats.length;
+            }
+            updateTotalPrice();
+        }
+
+        function updateTotalPrice() {
+            let totalPrice = 0;
+            selectedSeats.forEach(seat => {
+                const seatCheckbox = document.querySelector(`.seat-checkbox[value="${seat}"]`);
+                const seatPrice = parseFloat(seatCheckbox.getAttribute('data-price'));
+                totalPrice += seatPrice;
+            });
+            document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
+            document.getElementById('selected_seats').value = selectedSeats.join(',');
+            document.getElementById('total_price').value = totalPrice.toFixed(2);
+        }
+    });
+</script>
+{% else %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -182,7 +247,9 @@
                 selectedSeats = selectedSeats.filter(seat => seat !== seatValue);
             }
             const quantityInput = document.getElementById('quantity');
-            quantityInput.value = selectedSeats.length;
+            if (quantityInput) {
+                quantityInput.value = selectedSeats.length;
+            }
             updateTotalPrice();
         }
 
@@ -199,7 +266,10 @@
                 totalPrice = ticketPrice * quantity;
             }
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
+            document.getElementById('selected_seats').value = selectedSeats.join(',');
+            document.getElementById('total_price').value = totalPrice.toFixed(2);
         }
     });
 </script>
+{% endif %}
 {% endblock content %}

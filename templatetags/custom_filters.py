@@ -12,8 +12,9 @@ def add(value, arg):
 
 @register.simple_tag
 def oturma_duzeni():
-    deger =[]
-    for i in range(1,138):
+    deger =["-4",1,2,3,4,5,6,"-2",13,14,15,16,17,18,"-1","-4",7,8,9,10,11,12,19,20,21,22,23,24,"-1"]
+    
+    for i in range(25,141):
         if i == 1:
             deger.append("-1") 
         
@@ -21,10 +22,34 @@ def oturma_duzeni():
             deger.append("-2") 
         elif i == 13:
            deger.append("-1") 
-        elif i == 25:
-           deger.append("-1")
-        elif (i-25) % 15 == 0 and i >24  :
-            deger.append("-1")        
+        elif i == 37 :
+            deger.append("0")
+        elif i == 57:
+            deger.append("-3")
+        elif i == 64 :
+            deger.append("-4")
+            deger.append("-3")
+        elif (i-25) % 15 == 0 and i >24  and i < 66 :
+            deger.append("-1")
+            deger.append("-4")  
+        elif i == 67:
+            deger.append("-1")
+            deger.append("-4")
+            deger.append("-4")
+            deger.append("-4")
+        elif i == 76:
+            deger.append("-4")
+        elif i == 78:
+            deger.append("-1")
+            deger.append("-4")
+        elif i == 89:
+           deger.append("-1") 
+        elif i == 101:
+           deger.append("-1")  
+        elif i == 115:
+           deger.append("-1")  
+        elif i == 128:
+           deger.append("-1")  
         deger.append(i)
 
     return deger

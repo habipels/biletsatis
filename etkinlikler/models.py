@@ -25,10 +25,12 @@ class etkinlik_sepeti(models.Model):
     katilimci_telefon = models.CharField(max_length=200)
     satin_alama_durumu = models.BooleanField(default=False)
     satin_alma_tarihi = models.DateTimeField(blank=True, null=True)
+    toplam_fiyat = models.FloatField(default=0)
     elden_satis = models.BooleanField(default=False)
     elden_satis_yapilan_ip = models.GenericIPAddressField(blank=True, null=True)
     def __str__(self):
-        return self.katilimci
+        return f"{self.katilimci} - {self.etkinlik.etkinlik_adi}"
+
 class sepet_koltuk(models.Model):
     etkinlik_sepeti = models.ForeignKey(etkinlik_sepeti, on_delete=models.CASCADE)
     koltuk_no = models.IntegerField()
