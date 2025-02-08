@@ -161,6 +161,22 @@ import requests
 from django.contrib import messages
 import pprint
 from django.shortcuts import render, redirect,get_object_or_404
+import json
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
+import base64
+import hashlib
+import hmac
+import html
+import json
+import random
+
+from django.shortcuts import render, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def callback(request):
     return HttpResponse(str('OK'))
@@ -181,8 +197,9 @@ def fail(request):
     return HttpResponse("Bundle Purchase Failed")
 
 def home(request):
-    merchant_ok_url = "https://www.trakyaotoyedekparca.com/pay/success/"
-    merchant_fail_url = 'https://www.trakyaotoyedekparca.com/pay/failure/'
+    sozluk = site_ayarlar()
+    merchant_ok_url = "https://humanbilet.com/pay/out/success/"
+    merchant_fail_url = 'https://humanbilet.com/pay/out/failure/'
     context = dict()
     if request.user.is_authenticated:
         ads =sepet_sahibi_bilgileri.objects.filter(kayitli_kullanici = sepet_olusturma.objects.filter(sepet_sahibi = request.user,sepet_satin_alma_durumu = False).last()).last()
@@ -209,7 +226,7 @@ def home(request):
     user_basket = base64.b64encode(json.dumps(sepetteki_urunler_getir).encode())
 
 
-    test_mode = '0'
+    test_mode = '1'
     debug_on = '1'
 
     # 3d'siz işlem

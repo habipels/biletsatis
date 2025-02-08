@@ -12,7 +12,7 @@ urlpatterns = [
     path("hakkimizda/", views.hakkimizdaa, name="hakkimizda"),
     path("sepet/", views.sepet, name="sepet"),
     path('pay/out/payment/', views.home, name='payment'),
-    path('pay/out/result', views.callback, name='result'),
+    path('pay/out/result/', views.callback, name='result'),
     path('pay/out/success/', views.success, name='success'),
     path('pay/out/failure/', views.fail, name='failure'),
 ]
