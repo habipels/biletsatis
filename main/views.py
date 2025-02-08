@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.utils import timezone
 from django.core.paginator import Paginator
 from .models import Article, ArticleSeries
@@ -261,3 +261,9 @@ No:16/3, 65100
     else:
         print(result.text)
     return render(request, 'odeme/payment.html', {"res": res, "content": sozluk})
+
+def custom_404(request, exception):
+    return render(request, '404.html', {}, status=404)
+
+def custom_500(request):
+    return render(request, '500.html', {}, status=500)
