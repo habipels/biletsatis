@@ -1,13 +1,19 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.utils import timezone
 from django.core.paginator import Paginator
 from .models import Article, ArticleSeries
 from site_set.models import *
 from etkinlikler.models import *
-merchant_id = "541050"
-merchant_key = "QibXaYCYBac138za"
-merchant_salt = "XxTeSrRGjacxSt3x"
+import base64
+import hashlib
+import hmac
+import json
+import random
+import requests
+from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -149,83 +155,43 @@ def sepet(request):
             # Process the form data as needed
             # For example, save the order to the database or send a confirmation email
             # ...
-        
+            return redirect("main:payment")
     content["sepet"] = etkinlik_sepeti.objects.filter(elden_satis_yapilan_ip=get_client_ip(request))
     return render(request, 'sayfalar/sepet.html', context=content)
-# Create your views here.
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
-import requests
-from django.contrib import messages
-import pprint
-from django.shortcuts import render, redirect,get_object_or_404
-import json
-from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.template.loader import get_template
-from django.core.mail import EmailMultiAlternatives
-import base64
-import hashlib
-import hmac
-import html
-import json
-import random
 
-from django.shortcuts import render, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def callback(request):
     return HttpResponse(str('OK'))
 
-
 def success(request):
     context = dict()
-   
+    a = etkinlik_sepeti.objects.filter(satin_alama_durumu = False, elden_satis_yapilan_ip = get_client_ip(request)).last()
+    etkinlik_sepeti.objects.filter(id = a.id).update(satin_alama_durumu = True, satin_alma_tarihi = timezone.now())
     messages.success(request, f"Satın Alma Başarılı")
     return redirect("/")
-
 
 def fail(request):
     context = dict()
     context['fail'] = 'İşlem Başarısız'
-
     messages.success(request, f"Bundle Purchase Failed")
     return HttpResponse("Bundle Purchase Failed")
 
 def home(request):
     sozluk = site_ayarlar()
-    merchant_ok_url = "https://humanbilet.com/pay/out/success/"
-    merchant_fail_url = 'https://humanbilet.com/pay/out/failure/'
-    context = dict()
-    if request.user.is_authenticated:
-        ads =sepet_sahibi_bilgileri.objects.filter(kayitli_kullanici = sepet_olusturma.objects.filter(sepet_sahibi = request.user,sepet_satin_alma_durumu = False).last()).last()
-        user_sepet = sepet_olusturma.objects.filter(sepet_sahibi = request.user,sepet_satin_alma_durumu = False).last()
-        sepetteki_urunler_getir = []
-        a = sepetteki_urunler.objects.filter(kayitli_kullanici = user_sepet)
-        toplam_fiyat = 0
-        for i in a:
-            if i.urun_adedi > 0:
-                sepetteki_urunler_getir.append([str(i.urun_bilgisi.urun_adi),str(i.urun_bilgisi.fiyat),int(i.urun_adedi)])
-                toplam_fiyat = toplam_fiyat+ (float(i.urun_bilgisi.fiyat)*int(i.urun_adedi))
-        merchant_oid =bugunsiparis()+'OS' + random.randint(1, 9999999).__str__()+"ID"+ str(user_sepet.id)
-    else:
-        ads = get_object_or_404(sepet_sahibi_bilgileri,kayitli_olmayan_kullanici = sepet_olusturma_ip.objects.filter(sepet_sahibi = get_client_ip(request),sepet_satin_alma_durumu = False).last())
-        user_sepet = sepet_olusturma_ip.objects.filter(sepet_sahibi = get_client_ip(request),sepet_satin_alma_durumu = False).last()
-        sepetteki_urunler_getir = []
-        a = sepetteki_urunler.objects.filter(kayitli_olmayan_kullanici = user_sepet)
-        toplam_fiyat = 0
-        for i in a:
-            if i.urun_adedi > 0:
-                sepetteki_urunler_getir.append([str(i.urun_bilgisi.urun_adi),str(i.urun_bilgisi.fiyat),int(i.urun_adedi)])
-                toplam_fiyat = toplam_fiyat+ (float(i.urun_bilgisi.fiyat)*int(i.urun_adedi))
-        merchant_oid =bugunsiparis()+'OS' + random.randint(1, 9999999).__str__()+"KayitsizID"+ str(user_sepet.id)
+    merchant_id = "541050"
+    merchant_key = "QibXaYCYBac138za"
+    merchant_salt = "XxTeSrRGjacxSt3x"
+    merchant_ok_url = "http://127.0.0.1:8000/pay/out/success/"
+    merchant_fail_url = 'http://127.0.0.1:8000/pay/out/failure/'
+    sepet_bilgisi = etkinlik_sepeti.objects.filter(satin_alama_durumu = False, elden_satis_yapilan_ip = get_client_ip(request)).last()
+    merchant_oid =  str(random.randint(1, 9999999)) + "ID" + str(sepet_bilgisi.id)
+    toplam_fiyat = sepet_bilgisi.toplam_fiyat
+    sepetteki_urunler_getir = []
+    bilgiler = sepet_koltuk.objects.filter(etkinlik_sepeti = sepet_bilgisi)
+    for i in bilgiler:
+        sepetteki_urunler_getir.append([str(i.koltuk_no), sepet_bilgisi.etkinlik.etkinlik_fiyati, 1])
+    
     user_basket = base64.b64encode(json.dumps(sepetteki_urunler_getir).encode())
-
-
     test_mode = '1'
     debug_on = '1'
 
@@ -238,24 +204,25 @@ def home(request):
     # non3d işlemde, başarısız işlemi test etmek için 1 gönderilir (test_mode ve non_3d değerleri 1 ise dikkate alınır!)
     non3d_test_failed = '0'
     user_ip = str(get_client_ip(request))
-    email = str(ads.email)
+    email = str(sepet_bilgisi.katilimci_email)
 
     # 100.99 TL ödeme
-
-    payment_amount = str(int(toplam_fiyat)*100)
+    payment_amount = str(int(toplam_fiyat) * 100)
     currency = 'TL'
     payment_type = 'card'
-    user_name = str(ads.isim)+" "+ str(ads.soyisim)
-    user_address = str(ads.adres) + " "+str(ads.sehirler)+" "+str(ads.ulke)
-    user_phone = str(ads.telefon)
+    user_name = str(sepet_bilgisi.katilimci)
+    user_address = """Şerefiye, Kültür Sk.
+No:16/3, 65100
+İpekyolu/Van""" + " VAN" + " Türkiye"
+    user_phone = str(sepet_bilgisi.katilimci_telefon)
     no_installment = "1"
-    max_installment="3"
+    max_installment = "3"
     # Alabileceği değerler; advantage, axess, combo, bonus, cardfinans, maximum, paraf, world, saglamkart
     card_type = 'bonus'
     installment_count = '1'
 
-    hash_str = merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket.decode()+ no_installment + max_installment + currency + test_mode
-    paytr_token = base64.b64encode(hmac.new(merchant_key, hash_str.encode() + merchant_salt, hashlib.sha256).digest())
+    hash_str = merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket.decode() + no_installment + max_installment + currency + test_mode
+    paytr_token = base64.b64encode(hmac.new(merchant_key.encode(), (hash_str + merchant_salt).encode(), hashlib.sha256).digest())
     context = {
         'merchant_id': merchant_id,
         'user_ip': user_ip,
@@ -280,7 +247,6 @@ def home(request):
         'non3d_test_failed': non3d_test_failed,
         'installment_count': installment_count,
         'card_type': card_type,
-
     }
     result = requests.post('https://www.paytr.com/odeme/api/get-token', context)
     res = json.loads(result.text)
@@ -289,11 +255,9 @@ def home(request):
         print(res['token'])
         print(result.text)
 
-
-        content = {
-            'token': res['token']
-        }
+        sozluk ['token'] = res['token']
+        
 
     else:
         print(result.text)
-    return render(request, 'odeme/payment.html',{"res":res,"content":sozluk})
+    return render(request, 'odeme/payment.html', {"res": res, "content": sozluk})

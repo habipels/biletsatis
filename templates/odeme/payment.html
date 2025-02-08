@@ -1,0 +1,49 @@
+{% extends "homebase.html" %}
+{% load static %}
+{% block header %}
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="/" class="logo">HUMAN<em>SAHNE</em></a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{% url 'main:homepage' %}" > <b><i>ANASAYFA</i></b> </a></li>
+                            <li><a  href="{% url 'main:etkinlikler_sayfasi' %}"><b><i>ETKİNLİKLER</i></b></a></li>
+                            <li><a  href="{% url 'main:galeri' %}"><b><i>GALERİ</i></b></a></li>
+                            <li><a  href="{% url 'main:duyurular' %}"><b><i>DUYURULAR</i></b></a></li> 
+                            <li><a class="active" href="{% url 'main:iletisim' %}"><b><i>İLETİŞİM</i></b></a></li> 
+                            <li><a  href="{% url 'main:hakkimizda' %}"><b><i>HAKKIMIZDA</i></b></a></li> 
+                        </ul>        
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section-heading">
+                <h2>Ödeme İşlemi</h2>
+            </div>
+        </div>
+       <div class="col-lg-12">
+             <script src="https://www.paytr.com/js/iframeResizer.min.js"></script>
+<iframe src="https://www.paytr.com/odeme/guvenli/{{res.token}}" id="paytriframe" frameborder="0" scrolling="no" style="width: 100%;"></iframe>
+<script>iFrameResize({},'#paytriframe');</script>
+        </div>
+</div>
+</div>
+{% endblock content %}
