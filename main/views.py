@@ -46,6 +46,7 @@ def homepage(request):
     content = site_ayarlar()
     content["son_3_etkinlik"] = etkinlikler.objects.all().order_by('-etkinlik_tarihi')[:3]
     content["etkinlikler"]  = etkinlikler.objects.all().order_by('-etkinlik_tarihi')
+    content["son_3_duyuru"] = Article.objects.all().order_by('-published')[:3]
     content["client_ip"] = get_client_ip(request)
     return render(
         request=request,
