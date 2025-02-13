@@ -13,6 +13,7 @@ import random
 import requests
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -41,13 +42,29 @@ def site_ayarlar():
     sozluk["now"] = timezone.now()
     return sozluk
 
+def send_notification(ip):
+    try:
+        if not etkinlik_bildirimi.objects.filter(etkinlik_url=ip).exists():
+            bildirim = etkinlik_bildirimi.objects.create(
+                etkinlik_url=ip,
+                bildirim_tarihi=timezone.now(),
+                bildirim_mesaji="Sitemize hoş geldiniz! Yeni etkinlikler ve duyurular için bizi takip edin.",
+                etkinlik=None
+            )
+            # Here you can add code to send the notification, e.g., via email or a messaging service
+            print(f"Bildirim gönderildi: {bildirim.bildirim_mesaji}")
+    except IntegrityError as e:
+        print(f"IntegrityError: {e}")
+
 # Create your views here.
 def homepage(request):
     content = site_ayarlar()
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
     content["son_3_etkinlik"] = etkinlikler.objects.all().order_by('-etkinlik_tarihi')[:3]
     content["etkinlikler"]  = etkinlikler.objects.all().order_by('-etkinlik_tarihi')
     content["son_3_duyuru"] = Article.objects.all().order_by('-published')[:3]
-    content["client_ip"] = get_client_ip(request)
+    content["client_ip"] = client_ip
     return render(
         request=request,
         template_name='sayfalar/index.html',
@@ -56,61 +73,77 @@ def homepage(request):
 
 def etkinlikler_sayfasi(request):
     content = site_ayarlar()
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
     etkinlik_list = etkinlikler.objects.all().order_by('-etkinlik_tarihi')
     paginator = Paginator(etkinlik_list, 10)  # Show 10 events per page
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     content["page_obj"] = page_obj
-    content["client_ip"] = get_client_ip(request)
+    content["client_ip"] = client_ip
     return render(request, 'sayfalar/etkinlikler.html', context=content)
 
 def duyurular(request):
     content = site_ayarlar()
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
     content["duyuru_kategorileri"] = ArticleSeries.objects.all()
     if request.GET.get("kategori"):
         content["duyurular"] = Article.objects.filter(series__slug=request.GET.get("kategori")).order_by('-published')[:15]
     else:
         content["duyurular"] = Article.objects.all().order_by('-published')[:15]
-    content["client_ip"] = get_client_ip(request)
+    content["client_ip"] = client_ip
     return render(request, 'sayfalar/duyurular.html', context=content)
 
 def duyuru_detay(request, series_slug, article_slug):
     content = site_ayarlar()
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
     content["duyuru"] = Article.objects.get(series__slug=series_slug, article_slug=article_slug)
-    content["client_ip"] = get_client_ip(request)
+    content["client_ip"] = client_ip
     return render(request, 'sayfalar/duyuru_detay.html', context=content)
 
 def etkinlik_detay(request, etkinlik_id, slug):
     content = site_ayarlar()
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
     content["etkinlik"] = get_object_or_404(etkinlikler, id=etkinlik_id)
-    content["client_ip"] = get_client_ip(request)
+    content["client_ip"] = client_ip
     return render(request, 'sayfalar/etkinlik_detay.html', context=content)
 
 def galeri(request):
     content = site_ayarlar()
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
     etkinlik_list = resimler.objects.all()
     paginator = Paginator(etkinlik_list, 10)  # Show 10 events per page
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     content["page_obj"] = page_obj
-    content["client_ip"] = get_client_ip(request)
+    content["client_ip"] = client_ip
     return render(request, 'sayfalar/galeri.html', context=content)
 
 def iletisimm(request):
     content = site_ayarlar()
-    content["client_ip"] = get_client_ip(request)
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
+    content["client_ip"] = client_ip
     return render(request, 'sayfalar/iletisim.html', context=content)
 
 def hakkimizdaa(request):
     content = site_ayarlar()
-    content["client_ip"] = get_client_ip(request)
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
+    content["client_ip"] = client_ip
     return render(request, 'sayfalar/hakkimizda.html', context=content)
 
 def sepet(request):
     content = site_ayarlar()
-    content["client_ip"] = get_client_ip(request)
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
+    content["client_ip"] = client_ip
     
     if request.method == "POST":
         if not request.POST.get("name"):
@@ -144,7 +177,7 @@ def sepet(request):
                 katilimci_email=email,
                 katilimci_telefon=phone,
                 toplam_fiyat=total_price,
-                elden_satis_yapilan_ip=get_client_ip(request)
+                elden_satis_yapilan_ip=client_ip
             )
             
             if selected_seats:
@@ -157,7 +190,7 @@ def sepet(request):
             # For example, save the order to the database or send a confirmation email
             # ...
             return redirect("main:payment")
-    content["sepet"] = etkinlik_sepeti.objects.filter(elden_satis_yapilan_ip=get_client_ip(request))
+    content["sepet"] = etkinlik_sepeti.objects.filter(elden_satis_yapilan_ip=client_ip)
     return render(request, 'sayfalar/sepet.html', context=content)
 
 @csrf_exempt
@@ -179,12 +212,14 @@ def fail(request):
 
 def home(request):
     sozluk = site_ayarlar()
+    client_ip = get_client_ip(request)
+    send_notification(client_ip)
     merchant_id = "541050"
     merchant_key = "QibXaYCYBac138za"
     merchant_salt = "XxTeSrRGjacxSt3x"
     merchant_ok_url = "http://127.0.0.1:8000/pay/out/success/"
     merchant_fail_url = 'http://127.0.0.1:8000/pay/out/failure/'
-    sepet_bilgisi = etkinlik_sepeti.objects.filter(satin_alama_durumu = False, elden_satis_yapilan_ip = get_client_ip(request)).last()
+    sepet_bilgisi = etkinlik_sepeti.objects.filter(satin_alama_durumu = False, elden_satis_yapilan_ip = client_ip).last()
     merchant_oid =  str(random.randint(1, 9999999)) + "ID" + str(sepet_bilgisi.id)
     toplam_fiyat = sepet_bilgisi.toplam_fiyat
     sepetteki_urunler_getir = []
@@ -204,7 +239,7 @@ def home(request):
 
     # non3d işlemde, başarısız işlemi test etmek için 1 gönderilir (test_mode ve non_3d değerleri 1 ise dikkate alınır!)
     non3d_test_failed = '0'
-    user_ip = str(get_client_ip(request))
+    user_ip = str(client_ip)
     email = str(sepet_bilgisi.katilimci_email)
 
     # 100.99 TL ödeme
