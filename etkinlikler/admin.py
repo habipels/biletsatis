@@ -7,9 +7,9 @@ class EtkinliklerAdmin(admin.ModelAdmin):
     list_filter = ('etkinlik_tarihi', 'etkinlik_yeri', 'etkinlik_organizator')
 
 class EtkinlikSepetiAdmin(admin.ModelAdmin):
-    list_display = ('etkinlik', 'katilimci', 'katilimci_email', 'katilimci_telefon', 'satin_alama_durumu', 'toplam_fiyat', 'satin_alma_tarihi')
-    search_fields = ('katilimci', 'katilimci_email', 'katilimci_telefon')
-    list_filter = ('satin_alama_durumu', 'satin_alma_tarihi', 'etkinlik')
+    list_display = ('etkinlik', 'katilimci', 'katilimci_email', 'katilimci_telefon', 'satin_alama_durumu', 'toplam_fiyat', 'satin_alma_tarihi',"elden_satis")
+    search_fields = ('katilimci', 'katilimci_email', 'katilimci_telefon',"elden_satis")
+    list_filter = ('satin_alama_durumu', 'satin_alma_tarihi', 'etkinlik',"elden_satis")
 
 class SepetKoltukAdmin(admin.ModelAdmin):
     list_display = ('etkinlik_sepeti', 'koltuk_no')

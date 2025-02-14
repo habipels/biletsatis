@@ -14,6 +14,7 @@ import requests
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -139,6 +140,7 @@ def hakkimizdaa(request):
     content["client_ip"] = client_ip
     return render(request, 'sayfalar/hakkimizda.html', context=content)
 
+
 def sepet(request):
     content = site_ayarlar()
     client_ip = get_client_ip(request)
@@ -167,7 +169,6 @@ def sepet(request):
             email = request.POST.get('email')
             
             if not (name and surname and phone and email):
-                # Handle the case where required fields are missing
                 content["error"] = "All fields are required."
                 return render(request, 'sayfalar/sepet.html', context=content)
             
@@ -186,10 +187,14 @@ def sepet(request):
             else:
                 for i in range(1, int(quantity) + 1):
                     sepet_koltuk.objects.create(etkinlik_sepeti=a, koltuk_no=i)
-            # Process the form data as needed
-            # For example, save the order to the database or send a confirmation email
-            # ...
-            return redirect("main:payment")
+            
+            if request.user.is_superuser:
+                etkinlik_sepeti.objects.filter(id=a.id).update(satin_alama_durumu=True, satin_alma_tarihi=timezone.now(), elden_satis=True)
+                messages.success(request, "Satın Alma Başarılı (Admin)")
+                return redirect("main:homepage")
+            else:
+                return redirect("main:payment")
+    
     content["sepet"] = etkinlik_sepeti.objects.filter(elden_satis_yapilan_ip=client_ip)
     return render(request, 'sayfalar/sepet.html', context=content)
 

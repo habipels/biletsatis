@@ -75,7 +75,7 @@
                             </div>
                             <div class="right-content">
                                 <h4>{{i.etkinlik_adi}}</h4>
-                                <p>{{i.etkinlik_aciklama}}</p>
+                                <p>{{i.etkinlik_aciklama | safe}}</p>
                                 <ul>
                                 <li><i class="fa fa-calendar "></i>
                                 {% if i.etkinlik_tarihi|date:"U" < now|date:"U" %}

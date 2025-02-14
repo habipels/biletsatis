@@ -80,8 +80,8 @@
                             {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
                             {% else %}
                             <div class="total">
-                                <h4>Toplam: <span id="toplam_fiyat">{{etkinlik.etkinlik_fiyati}} ₺</span></h4>
-                                <button type="submit" style="background-color: black; color: white;" class="main-dark-button">SATIN AL</button>
+                                <h4>Toplam: <span id="toplam_fiyat">0 ₺</span></h4>
+                                <button type="submit" style="background-color: black; color: white;" class="main-dark-button" id="satin_al_button" disabled>SATIN AL</button>
                             </div>
                             {% endif %}
                         </form>
@@ -214,6 +214,7 @@
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
             document.getElementById('selected_seats').value = selectedSeats.join(',');
             document.getElementById('total_price').value = totalPrice.toFixed(2);
+            document.getElementById('satin_al_button').disabled = selectedSeats.length === 0;
         }
     });
 </script>
@@ -268,6 +269,7 @@
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
             document.getElementById('selected_seats').value = selectedSeats.join(',');
             document.getElementById('total_price').value = totalPrice.toFixed(2);
+            document.getElementById('satin_al_button').disabled = selectedSeats.length === 0;
         }
     });
 </script>
