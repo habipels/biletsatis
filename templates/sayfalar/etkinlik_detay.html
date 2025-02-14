@@ -61,29 +61,28 @@
                             <div class="quantity-content">
                                 {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
                                 {% else %}
-                                <div class="left-content">
-                                    <h6>Standard Bilet</h6>
-                                    <p>{{etkinlik.etkinlik_fiyati}} ₺ </p>
-                                </div>
-                                <div class="right-content">
-                                    {% if etkinlik.koltuk_duzeni_var_mi %}
+                                    {% if remaining_tickets > 0 %}
+                                        <div class="quantity-content">
+                                            {% if etkinlik.koltuk_duzeni_var_mi %}
+                                            {% else %}
+                                            <div class="quantity buttons_added">
+                                                <input type="button" value="-" class="minus" onclick="updateQuantity(-1)">
+                                                <input type="number" step="1" min="1" max="{{ remaining_tickets }}" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="" id="quantity">
+                                                <input type="button" value="+" class="plus" onclick="updateQuantity(1)">
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="total">
+                                            <h4>Toplam: <span id="toplam_fiyat">0 ₺</span></h4>
+                                            <button type="submit" style="background-color: black; color: white;" class="main-dark-button" id="satin_al_button">SATIN AL</button>
+                                        </div>
                                     {% else %}
-                                    <div class="quantity buttons_added">
-                                        <input type="button" value="-" class="minus" onclick="updateQuantity(-1)">
-                                        <input type="number" step="1" min="1" max="" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="" id="quantity">
-                                        <input type="button" value="+" class="plus" onclick="updateQuantity(1)">
-                                    </div>
+                                        <div class="alert alert-danger" role="alert">
+                                            Bu etkinlik için biletler tükenmiştir.
+                                        </div>
                                     {% endif %}
-                                </div>
                                 {% endif %}
                             </div>
-                            {% if etkinlik.etkinlik_tarihi|date:"U" < now|date:"U" %}
-                            {% else %}
-                            <div class="total">
-                                <h4>Toplam: <span id="toplam_fiyat">0 ₺</span></h4>
-                                <button type="submit" style="background-color: black; color: white;" class="main-dark-button" id="satin_al_button" disabled>SATIN AL</button>
-                            </div>
-                            {% endif %}
                         </form>
                         <div class="warn">
                             <p></p>
@@ -222,8 +221,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let selectedSeats = [];
         const ticketPrice = parseFloat("{{etkinlik.etkinlik_fiyati}}");
+        const remainingTickets = {{ remaining_tickets }};
 
         window.updateQuantity = function(change) {
             const quantityInput = document.getElementById('quantity');
@@ -232,45 +231,22 @@
             quantity += change;
             if (quantity < 1) {
                 quantity = 1;
-            } else if (change < 0 && selectedSeats.length > 0) {
-                const seatValue = selectedSeats.pop();
-                document.querySelector(`.seat-checkbox[value="${seatValue}"]`).checked = false;
+            } else if (quantity > remainingTickets) {
+                quantity = remaining_tickets;
             }
             quantityInput.value = quantity;
             updateTotalPrice();
         }
 
-        window.updateSeatSelection = function(checkbox) {
-            const seatValue = parseInt(checkbox.value);
-            if (checkbox.checked) {
-                selectedSeats.push(seatValue);
-            } else {
-                selectedSeats = selectedSeats.filter(seat => seat !== seatValue);
-            }
-            const quantityInput = document.getElementById('quantity');
-            if (quantityInput) {
-                quantityInput.value = selectedSeats.length;
-            }
-            updateTotalPrice();
+        function updateTotalPrice() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const totalPrice = ticketPrice * quantity;
+            document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
+            document.getElementById('total_price').value = totalPrice.toFixed(2);
+            document.getElementById('satin_al_button').disabled = quantity === 0 || quantity > remainingTickets;
         }
 
-        function updateTotalPrice() {
-            let totalPrice = 0;
-            if (selectedSeats.length > 0) {
-                selectedSeats.forEach(seat => {
-                    const seatCheckbox = document.querySelector(`.seat-checkbox[value="${seat}"]`);
-                    const seatPrice = parseFloat(seatCheckbox.getAttribute('data-price'));
-                    totalPrice += seatPrice;
-                });
-            } else {
-                const quantity = parseInt(document.getElementById('quantity').value);
-                totalPrice = ticketPrice * quantity;
-            }
-            document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
-            document.getElementById('selected_seats').value = selectedSeats.join(',');
-            document.getElementById('total_price').value = totalPrice.toFixed(2);
-            document.getElementById('satin_al_button').disabled = selectedSeats.length === 0;
-        }
+        updateTotalPrice();
     });
 </script>
 {% endif %}
