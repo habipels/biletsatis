@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    # ...existing apps...
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,12 +43,9 @@ INSTALLED_APPS = [
     'fontawesomefree',
     'crispy_forms',
     'site_set',
-    'etkinlikler',
+    'etkinlikler',  # Ensure this line is present and correct
     'admin_panel',
     'ckeditor',
-
-    # Remove the incorrect entry
-    # 'biletsatis.templatetags',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

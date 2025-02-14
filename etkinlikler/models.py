@@ -61,3 +61,6 @@ class etkinlik_koltuk_fiyaatlari(models.Model):
     fiyat = models.FloatField()
     def __str__(self):
         return str(self.koltuk_no)
+
+    class Meta:
+        app_label = 'etkinlikler'
