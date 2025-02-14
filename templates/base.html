@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...existing code... -->
+</head>
+<body>
+    <!-- ...existing code... -->
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Notification Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if the user has already been notified
+            if (!getCookie('notified')) {
+                // Request notification permission
+                if (Notification.permission !== 'granted') {
+                    Notification.requestPermission().then(function(permission) {
+                        if (permission === 'granted') {
+                            showNotification();
+                        }
+                    });
+                } else {
+                    showNotification();
+                }
+            }
+        });
+
+        function showNotification() {
+            // Display the notification
+            const notification = new Notification('Hoş Geldiniz!', {
+                body: 'Sitemize hoş geldiniz! Yeni etkinlikler ve duyurular için bizi takip edin.',
+                icon: '{% static "path/to/icon.png" %}'  // Replace with the path to your icon
+            });
+
+            // Set a cookie to indicate that the user has been notified
+            setCookie('notified', 'true', 1);
+        }
+
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+    </script>
+
+    <!-- ...existing code... -->
+</body>
+</html>

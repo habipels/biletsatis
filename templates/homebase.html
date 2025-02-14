@@ -84,6 +84,71 @@
     {% include "include/footer.html" %}
     {% endblock footer %}
      <!-- *** Footer *** -->
+    
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Notification Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if the user has already been notified
+            const notificationId = "{{ request.session.notification_id }}";
+            if (notificationId && !getCookie('notified_' + notificationId)) {
+                // Request notification permission
+                if (Notification.permission !== 'granted') {
+                    Notification.requestPermission().then(function(permission) {
+                        if (permission === 'granted') {
+                            showNotification(notificationId);
+                        }
+                    });
+                } else {
+                    showNotification(notificationId);
+                }
+            }
+        });
+
+        function showNotification(notificationId) {
+            // Get the notification message from the session
+            const notificationMessage = "{{ request.session.notification_message|escapejs }}";
+            if (notificationMessage) {
+                // Display the notification
+                const notification = new Notification('Hoş Geldiniz!', {
+                    body: notificationMessage,
+                    icon: '{% static "path/to/icon.png" %}'  // Replace with the path to your icon
+                });
+
+                // Set a cookie to indicate that the user has been notified
+                setCookie('notified_' + notificationId, 'true', 1);
+            }
+        }
+
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+    </script>
+
     <!-- jQuery -->
     <script src="{% static 'assets/js/jquery-2.1.0.min.js' %}"></script>
 
