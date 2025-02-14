@@ -15,6 +15,8 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -109,8 +111,14 @@ def etkinlik_detay(request, etkinlik_id, slug):
     content = site_ayarlar()
     client_ip = get_client_ip(request)
     send_notification(client_ip)
-    content["etkinlik"] = get_object_or_404(etkinlikler, id=etkinlik_id)
+    etkinlik = get_object_or_404(etkinlikler, id=etkinlik_id)
+    content["etkinlik"] = etkinlik
     content["client_ip"] = client_ip
+    # Calculate remaining tickets
+    total_tickets = etkinlik.etkinlik_katitim_sayisi
+    sold_tickets = sepet_koltuk.objects.filter(etkinlik_sepeti__etkinlik=etkinlik, etkinlik_sepeti__satin_alama_durumu=True).count()
+    remaining_tickets = total_tickets - sold_tickets
+    content["remaining_tickets"] = remaining_tickets
     return render(request, 'sayfalar/etkinlik_detay.html', context=content)
 
 def galeri(request):
@@ -308,3 +316,21 @@ def custom_404(request, exception):
 
 def custom_500(request):
     return render(request, '500.html', {}, status=500)
+
+def robots_txt(request):
+    lines = [
+        "User-Agent: *",
+        "Disallow: /admin/",
+        "Sitemap: http://humanbilet/sitemap.xml"
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+class StaticViewSitemap(Sitemap):
+    priority = 0.5
+    changefreq = 'daily'
+
+    def items(self):
+        return ['main:homepage', 'main:etkinlikler_sayfasi', 'main:galeri', 'main:duyurular', 'main:iletisim', 'main:hakkimizda']
+
+    def location(self, item):
+        return reverse(item)

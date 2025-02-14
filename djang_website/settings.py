@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'etkinlikler',  # Ensure this line is present and correct
     'admin_panel',
     'ckeditor',
+    'django.contrib.sitemaps',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

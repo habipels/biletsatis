@@ -74,12 +74,13 @@
                                         </div>
                                         <div class="total">
                                             <h4>Toplam: <span id="toplam_fiyat">0 ₺</span></h4>
-                                            <button type="submit" style="background-color: black; color: white;" class="main-dark-button" id="satin_al_button">SATIN AL</button>
+                                            <button type="submit" style="background-color: black; color: white;" class="main-dark-button" id="satin_al_button" disabled>SATIN AL</button>
                                         </div>
                                     {% else %}
                                         <div class="alert alert-danger" role="alert">
                                             Bu etkinlik için biletler tükenmiştir.
                                         </div>
+                                        <button type="button" style="background-color: grey; color: white;" class="main-dark-button" disabled>BİLETLER TÜKENDİ</button>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -116,7 +117,6 @@
                             {% koltuk_fiyati etkinlik.id row as fiyat %}
                             {% if sonuc %}
                                 <td class="seat" style="background-color: #b70505;">
-                            
                                 {{ row }}
                             </td>
                             {% else %}
@@ -125,19 +125,15 @@
                                 {{ row }} - {{ fiyat }} ₺
                             </td>
                             {% endif %}
-                            
                         {% elif  row == "-2" %}
                         <td rowspan="2" colspan="4" style="text-align:center; background-image: url('https://www.berryalloc.com/-/media/sites/berryalloc/general/parquet/chateau-737x415px.ashx?h=415&w=737&la=tr-TR&hash=4F20AE50F2B9F7EBCE809E9B9139C9F7'); background-size: cover; background-position: center;" >
                             <b>SAHNE</b>
                         </td>
                         {% elif  row == "0" %}
                         <td rowspan="4" colspan="1"  >
-                            
                         </td>
                         {% elif  row == "-3" %}
                         <td style="background-color: black;">
-                           
-                            
                         </td>
                         {% elif  row == "-4" %}
                         <td >         
@@ -153,7 +149,6 @@
 </div>
 {% else %}
 {% endif %}
-
 
     <div class="ticket-details-page">
         <div class="container">
@@ -213,7 +208,7 @@
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
             document.getElementById('selected_seats').value = selectedSeats.join(',');
             document.getElementById('total_price').value = totalPrice.toFixed(2);
-            document.getElementById('satin_al_button').disabled = selectedSeats.length === 0;
+            document.getElementById('satin_al_button').disabled = selectedSeats.length === 0 || totalPrice === 0;
         }
     });
 </script>
@@ -243,7 +238,7 @@
             const totalPrice = ticketPrice * quantity;
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
             document.getElementById('total_price').value = totalPrice.toFixed(2);
-            document.getElementById('satin_al_button').disabled = quantity === 0 || quantity > remainingTickets;
+            document.getElementById('satin_al_button').disabled = quantity === 0 || quantity > remainingTickets || totalPrice === 0;
         }
 
         updateTotalPrice();

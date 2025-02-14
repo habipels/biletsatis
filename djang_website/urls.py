@@ -19,6 +19,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import handler404, handler500
 from main import views as main_views
+from django.contrib.sitemaps.views import sitemap
+from main.views import robots_txt, StaticViewSitemap
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 urlpatterns = [
     path("", include('users.urls')),
@@ -26,6 +32,8 @@ urlpatterns = [
     path("yonetim/", include('admin_panel.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 if settings.DEBUG:
