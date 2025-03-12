@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'etkinlikler',  # Ensure this line is present and correct
     'admin_panel',
     'ckeditor',
+    'django.contrib.sitemaps',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -58,7 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'djang_website.middleware.PageVisitMiddleware',  # Update the middleware path
+    #'djang_website.middleware.PageVisitMiddleware',  # Update the middleware path
 ]
 
 ROOT_URLCONF = 'djang_website.urls'

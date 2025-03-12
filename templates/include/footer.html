@@ -6,7 +6,7 @@
                         <h4>GÖSTERİLERİN ADRESİ</h4>
                         <hr>
                         <span>
-                        Şerefiye, Kültür Sk.<br> No:16/3, 65100 <br> İpekyolu/Van</span>
+                        {{adres}}</span>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -21,16 +21,16 @@
                             <li><a href="{% url 'main:iletisim' %}">İLETİŞİM</a></li>
                             <li><a href="{% url 'main:hakkimizda' %}">HAKKIMIZDA</a></li>
                         </ul>
-                     
+
 
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="hours">
-                        <h4>AÇILIŞ SAATLERİ</h4>
+                        <h4>GENEL BİLGİLER</h4>
                         <ul>
                             <li>HERGÜN : 09.00  -  00.00</li>
-                            
+                            <li><a style="color: white;" href="tel:{{numara}}">{{numara}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -64,10 +64,9 @@
                             <div class="col-lg-3">
                                 <div class="social-links">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        
-                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+
+
+                                        <li><a href="{{sosyalmedyaInsgr}}"><i class="fa fa-instagram"></i></a></li>
                                     </ul>
                                 </div>
                             </div>

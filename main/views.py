@@ -15,6 +15,8 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -109,8 +111,14 @@ def etkinlik_detay(request, etkinlik_id, slug):
     content = site_ayarlar()
     client_ip = get_client_ip(request)
     send_notification(client_ip)
-    content["etkinlik"] = get_object_or_404(etkinlikler, id=etkinlik_id)
+    etkinlik = get_object_or_404(etkinlikler, id=etkinlik_id)
+    content["etkinlik"] = etkinlik
     content["client_ip"] = client_ip
+    # Calculate remaining tickets
+    total_tickets = etkinlik.etkinlik_katitim_sayisi
+    sold_tickets = sepet_koltuk.objects.filter(etkinlik_sepeti__etkinlik=etkinlik, etkinlik_sepeti__satin_alama_durumu=True).count()
+    remaining_tickets = total_tickets - sold_tickets
+    content["remaining_tickets"] = remaining_tickets
     return render(request, 'sayfalar/etkinlik_detay.html', context=content)
 
 def galeri(request):
@@ -146,7 +154,7 @@ def sepet(request):
     client_ip = get_client_ip(request)
     send_notification(client_ip)
     content["client_ip"] = client_ip
-    
+
     if request.method == "POST":
         if not request.POST.get("name"):
             if request.POST.get("etkinlik_id"):
@@ -167,11 +175,11 @@ def sepet(request):
             surname = request.POST.get('surname')
             phone = request.POST.get('phone')
             email = request.POST.get('email')
-            
+
             if not (name and surname and phone and email):
                 content["error"] = "All fields are required."
                 return render(request, 'sayfalar/sepet.html', context=content)
-            
+
             a = etkinlik_sepeti.objects.create(
                 etkinlik=etkinlik,
                 katilimci=f"{name} {surname}",
@@ -180,21 +188,21 @@ def sepet(request):
                 toplam_fiyat=total_price,
                 elden_satis_yapilan_ip=client_ip
             )
-            
+
             if selected_seats:
                 for i in selected_seats.split(","):
                     sepet_koltuk.objects.create(etkinlik_sepeti=a, koltuk_no=i)
             else:
                 for i in range(1, int(quantity) + 1):
                     sepet_koltuk.objects.create(etkinlik_sepeti=a, koltuk_no=i)
-            
+
             if request.user.is_superuser:
                 etkinlik_sepeti.objects.filter(id=a.id).update(satin_alama_durumu=True, satin_alma_tarihi=timezone.now(), elden_satis=True)
                 messages.success(request, "Satın Alma Başarılı (Admin)")
                 return redirect("main:homepage")
             else:
                 return redirect("main:payment")
-    
+
     content["sepet"] = etkinlik_sepeti.objects.filter(elden_satis_yapilan_ip=client_ip)
     return render(request, 'sayfalar/sepet.html', context=content)
 
@@ -222,8 +230,8 @@ def home(request):
     merchant_id = "541050"
     merchant_key = "QibXaYCYBac138za"
     merchant_salt = "XxTeSrRGjacxSt3x"
-    merchant_ok_url = "http://127.0.0.1:8000/pay/out/success/"
-    merchant_fail_url = 'http://127.0.0.1:8000/pay/out/failure/'
+    merchant_ok_url = "https://humanbilet.com/pay/out/success/"
+    merchant_fail_url = 'https://humanbilet.com/pay/out/failure/'
     sepet_bilgisi = etkinlik_sepeti.objects.filter(satin_alama_durumu = False, elden_satis_yapilan_ip = client_ip).last()
     merchant_oid =  str(random.randint(1, 9999999)) + "ID" + str(sepet_bilgisi.id)
     toplam_fiyat = sepet_bilgisi.toplam_fiyat
@@ -231,9 +239,9 @@ def home(request):
     bilgiler = sepet_koltuk.objects.filter(etkinlik_sepeti = sepet_bilgisi)
     for i in bilgiler:
         sepetteki_urunler_getir.append([str(i.koltuk_no), sepet_bilgisi.etkinlik.etkinlik_fiyati, 1])
-    
+
     user_basket = base64.b64encode(json.dumps(sepetteki_urunler_getir).encode())
-    test_mode = '1'
+    test_mode = '0'
     debug_on = '1'
 
     # 3d'siz işlem
@@ -297,7 +305,7 @@ No:16/3, 65100
         print(result.text)
 
         sozluk ['token'] = res['token']
-        
+
 
     else:
         print(result.text)
@@ -308,3 +316,21 @@ def custom_404(request, exception):
 
 def custom_500(request):
     return render(request, '500.html', {}, status=500)
+
+def robots_txt(request):
+    lines = [
+        "User-Agent: *",
+        "Disallow: /admin/",
+        "Sitemap: http://humanbilet/sitemap.xml"
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+class StaticViewSitemap(Sitemap):
+    priority = 0.5
+    changefreq = 'daily'
+
+    def items(self):
+        return ['main:homepage', 'main:etkinlikler_sayfasi', 'main:galeri', 'main:duyurular', 'main:iletisim', 'main:hakkimizda']
+
+    def location(self, item):
+        return reverse(item)
