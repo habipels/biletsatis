@@ -55,10 +55,10 @@ def oturma_duzeni():
     return deger
 
 @register.simple_tag
-def etkinlik_koltuk_satin_alinma_durumu(etkinlik_id,koltuk_no):
+def etkinlik_koltuk_satin_alinma_durumu(etkinlik_id, koltuk_no):
     etkinlik = etkinlikler.objects.get(id=etkinlik_id)
-    koltuk = sepet_koltuk.objects.filter(etkinlik_sepeti__etkinlik=etkinlik,koltuk_no=koltuk_no,etkinlik_sepeti__satin_alama_durumu = True)
-    if koltuk:
+    koltuk = sepet_koltuk.objects.filter(etkinlik_sepeti__etkinlik=etkinlik, koltuk_no=koltuk_no, etkinlik_sepeti__satin_alama_durumu=True)
+    if koltuk.exists():
         return True
     else:
         return False

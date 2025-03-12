@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="total">
                                             <h4>Toplam: <span id="toplam_fiyat">0 ₺</span></h4>
-                                            <button type="submit" style="background-color: black; color: white;" class="main-dark-button" id="satin_al_button">SATIN AL</button>
+                                            <button type="submit" style="background-color: black; color: white;" class="main-dark-button" id="satin_al_button" disabled>SATIN AL</button>
                                         </div>
                                     {% else %}
                                         <div class="alert alert-danger" role="alert">
@@ -208,7 +208,7 @@
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
             document.getElementById('selected_seats').value = selectedSeats.join(',');
             document.getElementById('total_price').value = totalPrice.toFixed(2);
-            document.getElementById('satin_al_button').disabled = selectedSeats.length === 0;
+            document.getElementById('satin_al_button').disabled = selectedSeats.length === 0 || totalPrice === 0;
         }
     });
 </script>
@@ -238,7 +238,7 @@
             const totalPrice = ticketPrice * quantity;
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
             document.getElementById('total_price').value = totalPrice.toFixed(2);
-            document.getElementById('satin_al_button').disabled = quantity === 0 || quantity > remainingTickets;
+            document.getElementById('satin_al_button').disabled = quantity === 0 || quantity > remainingTickets || totalPrice === 0;
         }
 
         updateTotalPrice();
