@@ -126,7 +126,7 @@
                             </td>
                             {% endif %}
                         {% elif  row == "-2" %}
-                        <td rowspan="2" colspan="4" style="text-align:center; background-image: url('https://www.berryalloc.com/-/media/sites/berryalloc/general/parquet/chateau-737x415px.ashx?h=415&w=737&la=tr-TR&hash=4F20AE50F2B9F7EBCE809E9B9139C9F7'); background-size: cover; background-position: center;" >
+                        <td rowspan="4" colspan="4" style="text-align:center; background-image: url('https://www.berryalloc.com/-/media/sites/berryalloc/general/parquet/chateau-737x415px.ashx?h=415&w=737&la=tr-TR&hash=4F20AE50F2B9F7EBCE809E9B9139C9F7'); background-size: cover; background-position: center;" >
                             <b>SAHNE</b>
                         </td>
                         {% elif  row == "0" %}
@@ -204,11 +204,13 @@
                 const seatCheckbox = document.querySelector(`.seat-checkbox[value="${seat}"]`);
                 const seatPrice = parseFloat(seatCheckbox.getAttribute('data-price'));
                 totalPrice += seatPrice;
+                console.log(`Seat: ${seat}, Price: ${seatPrice}`);
             });
             document.getElementById('toplam_fiyat').innerText = totalPrice.toFixed(2) + ' ₺';
             document.getElementById('selected_seats').value = selectedSeats.join(',');
             document.getElementById('total_price').value = totalPrice.toFixed(2);
             document.getElementById('satin_al_button').disabled = selectedSeats.length === 0 || totalPrice === 0;
+            console.log(`Total Price: ${totalPrice}`);
         }
     });
 </script>

@@ -58,6 +58,24 @@ def send_notification(ip):
             print(f"Bildirim gönderildi: {bildirim.bildirim_mesaji}")
     except IntegrityError as e:
         print(f"IntegrityError: {e}")
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+
+
+
+def koltuk_fiyatlari_degistir_otomatik(request, etkinlik_id, baslangic_koltuk, koltuk_no, fiyat):
+    etkinlik = get_object_or_404(etkinlikler, id=etkinlik_id)
+    for i in range(baslangic_koltuk, baslangic_koltuk + koltuk_no):
+        try:
+            koltuk_fiyat = etkinlik_koltuk_fiyaatlari.objects.get(etkinlik=etkinlik, koltuk_no=i)
+            koltuk_fiyat.fiyat = fiyat
+            koltuk_fiyat.save()
+        except etkinlik_koltuk_fiyaatlari.DoesNotExist:
+            etkinlik_koltuk_fiyaatlari.objects.create(etkinlik=etkinlik, koltuk_no=i, fiyat=fiyat)
+    return JsonResponse({'status': 'success'})
+
+# Create your views here.
+
 
 # Create your views here.
 def homepage(request):

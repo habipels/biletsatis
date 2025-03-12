@@ -17,6 +17,13 @@ class etkinlikler(models.Model):
     def __str__(self):
         return self.etkinlik_adi
 
+    def get_koltuk_fiyati(self, koltuk_no):
+        try:
+            koltuk_fiyat = self.etkinlik_koltuk_fiyaatlari_set.get(koltuk_no=koltuk_no)
+            return koltuk_fiyat.fiyat
+        except etkinlik_koltuk_fiyaatlari.DoesNotExist:
+            return self.etkinlik_fiyati
+
 class etkinlik_sepeti(models.Model):
     etkinlik = models.ForeignKey(etkinlikler, on_delete=models.CASCADE)
     katilimci = models.CharField(max_length=200)

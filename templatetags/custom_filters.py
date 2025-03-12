@@ -12,7 +12,7 @@ def add(value, arg):
 
 @register.simple_tag
 def oturma_duzeni():
-    deger =["-4",1,2,3,4,5,6,"-2",13,14,15,16,17,18,"-1","-4",7,8,9,10,11,12,19,20,21,22,23,24,"-1"]
+    deger =["-4","-4","-4","-4",9,5,1,"-2",13,17,21,"-1","-4","-4","-4","-4",10,6,2,14,18,22,"-1","-4","-4","-4","-4",11,7,3,15,19,23,"-1","-4","-4","-4","-4",12,8,4,16,20,24]
     
     for i in range(25,141):
         if i == 1:
@@ -46,9 +46,9 @@ def oturma_duzeni():
            deger.append("-1") 
         elif i == 101:
            deger.append("-1")  
-        elif i == 115:
+        elif i == 113:
            deger.append("-1")  
-        elif i == 128:
+        elif i == 125:
            deger.append("-1")  
         deger.append(i)
 
@@ -66,8 +66,6 @@ def etkinlik_koltuk_satin_alinma_durumu(etkinlik_id, koltuk_no):
 @register.simple_tag
 def koltuk_fiyati(etkinlik_id, koltuk_no):
     etkinlik = etkinlikler.objects.get(id=etkinlik_id)
-    fiyat = etkinlik_koltuk_fiyaatlari.objects.filter(etkinlik=etkinlik, koltuk_no__lte=koltuk_no).order_by('-koltuk_no').first()
-    if fiyat:
-        return fiyat.fiyat
-    else:
-        return etkinlik.etkinlik_fiyati
+    fiyat = etkinlik.get_koltuk_fiyati(koltuk_no)
+    print(f"Koltuk No: {koltuk_no}, Fiyat: {fiyat}")
+    return fiyat
